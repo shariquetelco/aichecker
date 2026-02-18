@@ -3,7 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AiCHECKER — AI vs Human Detector</title>
+  <title>ISAICHECK — Vibe Code AI Detector</title>
+  <meta name="description" content="ISAICHECK is a vibe-code AI checker that analyzes whether code, websites, repos, or text feel AI-generated or human-written. Free. No login. Runs in your browser." />
+  <meta property="og:title" content="ISAICHECK — Vibe Code AI Detector" />
+  <meta property="og:description" content="Know if it was written by AI in 3 seconds. Analyze websites, GitHub repos, documents and pasted text. No login. No data stored." />
+  <meta property="og:url" content="https://isaicheck.com" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="ISAICHECK — Vibe Code AI Detector" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=JetBrains+Mono:wght@400;500;700&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -627,6 +633,141 @@
     .footer-links a:hover { color: var(--accent2); }
     .footer-note { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--text-muted); opacity: 0.6; }
 
+    /* ── Trust Strip ────────────────────────────────── */
+    .trust-strip {
+      position: relative; z-index: 1;
+      border-top: 1px solid rgba(123,97,255,0.1);
+      border-bottom: 1px solid rgba(123,97,255,0.1);
+      background: rgba(123,97,255,0.03);
+      padding: 14px 24px;
+    }
+    .trust-strip-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: center;
+      gap: 0; flex-wrap: wrap;
+    }
+    .trust-item {
+      display: flex; align-items: center; gap: 7px;
+      padding: 6px 20px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem; font-weight: 500;
+      color: var(--text-muted); letter-spacing: 0.05em;
+      white-space: nowrap;
+    }
+    .trust-item svg { width: 14px; height: 14px; color: var(--human-green); flex-shrink: 0; }
+    .trust-divider {
+      width: 1px; height: 18px;
+      background: var(--border); flex-shrink: 0;
+    }
+    @media (max-width: 640px) {
+      .trust-strip-inner { gap: 0; }
+      .trust-item { font-size: 0.66rem; padding: 5px 10px; }
+      .trust-divider { display: none; }
+    }
+
+    /* ── Share Strip ─────────────────────────────────── */
+    .share-strip {
+      display: none;
+      margin-top: 20px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--r-xl);
+      padding: 20px 26px;
+      align-items: center; gap: 16px; flex-wrap: wrap;
+    }
+    .share-strip.visible { display: flex; }
+    .share-strip-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem; font-weight: 700;
+      color: var(--text-muted); letter-spacing: 0.1em;
+      text-transform: uppercase; flex-shrink: 0;
+    }
+    .share-btns { display: flex; gap: 10px; flex-wrap: wrap; }
+    .btn-share {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 9px 18px;
+      border: 1px solid var(--border2);
+      border-radius: var(--r-md);
+      background: rgba(255,255,255,0.04);
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.8rem; font-weight: 700;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--text-dim); cursor: pointer;
+      transition: all var(--t-slow);
+    }
+    .btn-share:hover { background: rgba(123,97,255,0.1); border-color: var(--accent); color: var(--text); transform: translateY(-1px); }
+    .btn-share svg { width: 14px; height: 14px; flex-shrink: 0; }
+    .btn-share.twitter:hover { background: rgba(0,172,237,0.1); border-color: rgba(0,172,237,0.5); color: #00acee; }
+    .btn-share.copy-btn.copied { border-color: var(--human-green); color: var(--human-green); background: rgba(0,255,136,0.06); }
+
+    /* ── Placeholder Result Card ────────────────────── */
+    .placeholder-result {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--r-xl);
+      padding: 32px 28px;
+      text-align: center;
+      position: relative; overflow: hidden;
+      opacity: 0.72;
+    }
+    .placeholder-result::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: var(--accent);
+      box-shadow: 0 0 16px var(--accent);
+    }
+    .placeholder-badge {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.62rem; font-weight: 700;
+      color: var(--text-muted); letter-spacing: 0.12em;
+      text-transform: uppercase;
+      background: rgba(123,97,255,0.1);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 3px 12px; margin-bottom: 20px;
+    }
+    .placeholder-score {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 3.5rem; font-weight: 700;
+      color: var(--accent); line-height: 1;
+      margin-bottom: 6px;
+    }
+    .placeholder-pct {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.2rem; color: var(--text-muted);
+    }
+    .placeholder-category {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.1rem; font-weight: 700;
+      color: var(--accent2); letter-spacing: 0.06em;
+      margin: 12px 0 6px;
+    }
+    .placeholder-desc {
+      font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;
+    }
+    .placeholder-cta {
+      margin-top: 18px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem; color: var(--text-muted);
+      border-top: 1px solid var(--border);
+      padding-top: 14px; letter-spacing: 0.04em;
+    }
+    .placeholder-bar {
+      margin: 16px auto 0;
+      width: 80%; height: 6px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--human-green), var(--yellow), var(--orange), var(--neon));
+      position: relative; overflow: visible;
+    }
+    .placeholder-thumb {
+      position: absolute; top: 50%; left: 72%;
+      transform: translate(-50%, -50%);
+      width: 14px; height: 14px; border-radius: 50%;
+      background: #fff; border: 2px solid var(--accent);
+      box-shadow: 0 0 8px var(--accent);
+    }
+
     /* ── Free Forever Marquee Banner ─────────────────── */
     .free-banner {
       background: linear-gradient(90deg, rgba(123,97,255,0.08) 0%, rgba(0,255,136,0.04) 50%, rgba(123,97,255,0.08) 100%);
@@ -902,11 +1043,11 @@
   <!-- ── Header ──────────────────────────────────────── -->
   <header role="banner">
     <div class="header-inner">
-      <a class="logo" href="#" aria-label="AiCHECKER home">
+      <a class="logo" href="#" aria-label="ISAICHECK home">
         <div class="logo-icon">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 19.5V21M12 3v1.5m0 15V21m3.75-18v1.5m0 15V21m-9-1.5h10.5a2.25 2.25 0 0 0 2.25-2.25V6.75a2.25 2.25 0 0 0-2.25-2.25H6.75A2.25 2.25 0 0 0 4.5 6.75v10.5a2.25 2.25 0 0 0 2.25 2.25Zm.75-12h9v9h-9v-9Z"/></svg>
         </div>
-        <span class="logo-text">Ai<span>CHECKER</span></span>
+        <span class="logo-text">ISAI<span>CHECK</span></span>
       </a>
       <div class="header-right">
         <span class="version-tag">v2.0</span>
@@ -917,9 +1058,9 @@
 
   <!-- ── Hero ────────────────────────────────────────── -->
   <section class="hero" aria-label="Introduction">
-    <p class="hero-eyebrow">Code Forensics Tool</p>
-    <h1>Detect AI-Written<br>Content Instantly</h1>
-    <p>Paste text, upload a file, scan a GitHub repo, or drop any URL. Our 18-signal heuristic engine runs entirely in your browser — no API key, no data upload, zero privacy risk.</p>
+    <p class="hero-eyebrow">Vibe Code Forensics Engine</p>
+    <h1>Know if it was written<br>by AI in 3 seconds.</h1>
+    <p>Analyze websites, GitHub repos, documents, and pasted text using a local forensic pattern engine. No login. No data stored.</p>
     <div class="hero-stats">
       <div class="hero-stat"><span class="hero-stat-val">18+</span><span class="hero-stat-lbl">Signal Checks</span></div>
       <div class="hero-stat"><span class="hero-stat-val">100%</span><span class="hero-stat-lbl">Browser-Side</span></div>
@@ -927,6 +1068,31 @@
       <div class="hero-stat"><span class="hero-stat-val">Free</span><span class="hero-stat-lbl">Always</span></div>
     </div>
   </section>
+
+  <!-- ── Trust Strip ──────────────────────────────────────── -->
+  <div class="trust-strip" aria-label="Trust signals">
+    <div class="trust-strip-inner">
+      <div class="trust-item">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z"/></svg>
+        Used by developers, students &amp; hiring teams
+      </div>
+      <div class="trust-divider"></div>
+      <div class="trust-item">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"/></svg>
+        Private by design
+      </div>
+      <div class="trust-divider"></div>
+      <div class="trust-item">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 0 1-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 0 1 4.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3"/></svg>
+        Runs fully in your browser
+      </div>
+      <div class="trust-divider"></div>
+      <div class="trust-item">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/></svg>
+        No tracking ever
+      </div>
+    </div>
+  </div>
 
   <!-- ── Free Forever Marquee ───────────────────────────── -->
   <div class="free-banner" aria-label="Free forever promise">
@@ -1100,6 +1266,16 @@
       </div>
     </div>
 
+    <!-- Placeholder demo card — shown before any scan -->
+    <div id="placeholder-result-card" class="placeholder-result" aria-label="Example result preview">
+      <div class="placeholder-badge">● EXAMPLE — Run a scan to see your result</div>
+      <div class="placeholder-score">72<span class="placeholder-pct">%</span></div>
+      <p class="placeholder-category">VIBE CODED</p>
+      <p class="placeholder-desc">Strong AI pattern consistency detected across structure, linguistic and entropy signals.</p>
+      <div class="placeholder-bar"><div class="placeholder-thumb"></div></div>
+      <p class="placeholder-cta">↑ Pick a tab above and run a scan to analyze your own content</p>
+    </div>
+
     <!-- Results -->
     <section id="results" aria-label="Analysis results" aria-live="polite">
       <div class="results-grid">
@@ -1143,6 +1319,28 @@
         </h3>
         <p class="summary-text" id="summary-text">—</p>
       </div>
+
+      <!-- Share strip — appears after scan -->
+      <div class="share-strip" id="share-strip" aria-label="Share your result">
+        <span class="share-strip-label">Share Result</span>
+        <div class="share-btns">
+          <button class="btn-share copy-btn" id="copy-result-btn" onclick="copyResult()" title="Copy result to clipboard">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.666 3.888A2.25 2.25 0 0 0 13.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 0 1-.75.75H9a.75.75 0 0 1-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 0 1-2.25 2.25H6.75A2.25 2.25 0 0 1 4.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 0 1 1.927-.184"/></svg>
+            Copy Result
+          </button>
+          <button class="btn-share twitter" onclick="shareOnTwitter()" title="Share on X / Twitter">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.254 5.622 5.91-5.622Zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            Share on X
+          </button>
+          <button class="btn-share" onclick="downloadCard()" title="Download shareable card">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
+            Download Card
+          </button>
+        </div>
+      </div>
+
+      <!-- Hidden canvas for screenshot generation -->
+      <canvas id="share-canvas" style="display:none"></canvas>
     </section>
 
     <hr />
@@ -1313,13 +1511,13 @@
 
   <footer role="contentinfo">
     <div class="footer-inner">
-      <p class="footer-logo">Ai<span>CHECKER</span></p>
+      <p class="footer-logo">ISAI<span>CHECK</span></p>
       <nav class="footer-links">
         <a onclick="scrollToTop()">Back to top</a>
         <a href="https://github.com/shariquetelco/aichecker" target="_blank" rel="noopener">GitHub</a>
-        <a href="https://vercel.com" target="_blank" rel="noopener">Hosted on Vercel</a>
+        <a href="https://isaicheck.com" target="_blank" rel="noopener">isaicheck.com</a>
       </nav>
-      <p class="footer-note">No data transmitted. All analysis runs locally. &copy; 2025 AiCHECKER</p>
+      <p class="footer-note">No data transmitted. All analysis runs locally in your browser. &copy; 2025 ISAICHECK</p>
     </div>
   </footer>
 
@@ -2046,17 +2244,114 @@
     // Summary
     document.getElementById('summary-text').textContent = buildSummary(score, signals, cat);
 
-    // Store for roast
+    // Store for roast + share
     lastScore = score;
     lastCategory = cat;
     const roastBtn = document.getElementById('roast-btn');
     if (roastBtn) roastBtn.style.display = 'flex';
+
+    // Hide placeholder, show share strip
+    const placeholder = document.getElementById('placeholder-result-card');
+    if (placeholder) placeholder.style.display = 'none';
+    const shareStrip = document.getElementById('share-strip');
+    if (shareStrip) shareStrip.classList.add('visible');
 
     // Show results
     const res = document.getElementById('results');
     res.classList.add('visible');
     res.scrollIntoView({ behavior: 'smooth', block: 'start' });
     showToast('Analysis complete — ' + cat.label);
+  }
+
+  // ── Share functions ────────────────────────────────────
+  function buildShareText() {
+    if (!lastScore || !lastCategory) return '';
+    return `I just checked this with ISAICHECK — scored ${lastScore.toFixed(1)}% and got "${lastCategory.label}" 🔍\nAI or human? Find out: https://isaicheck.com`;
+  }
+
+  function copyResult() {
+    const text = buildShareText();
+    if (!text) { showToast('Run a scan first.'); return; }
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = document.getElementById('copy-result-btn');
+      btn.classList.add('copied');
+      btn.textContent = '✓ Copied!';
+      showToast('Result copied to clipboard!');
+      setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="14" height="14"><path stroke-linecap="round" stroke-linejoin="round" d="M15.666 3.888A2.25 2.25 0 0 0 13.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 0 1-.75.75H9a.75.75 0 0 1-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 0 1-2.25 2.25H6.75A2.25 2.25 0 0 1 4.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 0 1 1.927-.184"/></svg> Copy Result'; }, 2500);
+    }).catch(() => showToast('Copy not supported in this browser.'));
+  }
+
+  function shareOnTwitter() {
+    const text = buildShareText();
+    if (!text) { showToast('Run a scan first.'); return; }
+    const url = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(text);
+    window.open(url, '_blank', 'noopener,noreferrer');
+  }
+
+  function downloadCard() {
+    if (!lastScore || !lastCategory) { showToast('Run a scan first.'); return; }
+    const canvas = document.getElementById('share-canvas');
+    canvas.width = 800; canvas.height = 420;
+    const ctx = canvas.getContext('2d');
+
+    // Background
+    ctx.fillStyle = '#050508';
+    ctx.fillRect(0, 0, 800, 420);
+
+    // Grid lines
+    ctx.strokeStyle = 'rgba(123,97,255,0.06)';
+    ctx.lineWidth = 1;
+    for (let x = 0; x < 800; x += 40) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, 420); ctx.stroke(); }
+    for (let y = 0; y < 420; y += 40) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(800, y); ctx.stroke(); }
+
+    // Top accent line
+    const grad = ctx.createLinearGradient(0, 0, 800, 0);
+    grad.addColorStop(0, 'transparent');
+    grad.addColorStop(0.3, lastCategory.color);
+    grad.addColorStop(0.7, lastCategory.color);
+    grad.addColorStop(1, 'transparent');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, 800, 3);
+
+    // Brand name
+    ctx.font = 'bold 22px monospace';
+    ctx.fillStyle = '#7b61ff';
+    ctx.textAlign = 'left';
+    ctx.fillText('ISAICHECK', 48, 60);
+    ctx.font = '13px monospace';
+    ctx.fillStyle = '#55556a';
+    ctx.fillText('isaicheck.com  ·  Vibe Code AI Detector', 48, 82);
+
+    // Score big
+    ctx.font = 'bold 120px monospace';
+    ctx.fillStyle = lastCategory.color;
+    ctx.textAlign = 'center';
+    ctx.fillText(lastScore.toFixed(1), 400, 240);
+
+    // % label
+    ctx.font = 'bold 28px monospace';
+    ctx.fillStyle = '#55556a';
+    ctx.fillText('/ 100', 400, 278);
+
+    // Category
+    ctx.font = 'bold 32px monospace';
+    ctx.fillStyle = lastCategory.color;
+    ctx.fillText(lastCategory.label, 400, 330);
+
+    // CTA
+    ctx.font = '16px monospace';
+    ctx.fillStyle = '#8888aa';
+    ctx.fillText('Check yours at isaicheck.com', 400, 390);
+
+    // Download
+    canvas.toBlob(blob => {
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'isaicheck-result-' + lastScore.toFixed(0) + '.png';
+      a.click();
+      URL.revokeObjectURL(a.href);
+      showToast('Card downloaded!');
+    }, 'image/png');
   }
 
   // Enter key on URL input
