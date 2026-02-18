@@ -1,0 +1,1904 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AiCHECKER — AI vs Human Detector</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- PDF.js CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+  <style>
+    /* ─── Reset & Base ─────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary:    #E8B4B8;
+      --secondary:  #A8D5BA;
+      --cta:        #D4AF37;
+      --bg:         #FFF5F5;
+      --bg2:        #FFF0F0;
+      --bg3:        #FDEAEA;
+      --text:       #2D3436;
+      --text-light: #636E72;
+      --white:      #FFFFFF;
+      --shadow-sm:  0 2px 8px rgba(45,52,54,0.08);
+      --shadow-md:  0 4px 20px rgba(45,52,54,0.12);
+      --shadow-lg:  0 8px 40px rgba(45,52,54,0.16);
+      --radius-sm:  8px;
+      --radius-md:  16px;
+      --radius-lg:  24px;
+      --radius-xl:  32px;
+      --transition: 200ms ease;
+      --transition-slow: 300ms ease;
+
+      /* Score category colors */
+      --vibe:   #2ECC71;
+      --sus:    #F39C12;
+      --mixed:  #E67E22;
+      --human:  #E74C3C;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    /* ─── Skip link (a11y) ─────────────────────────────────── */
+    .skip-link {
+      position: absolute;
+      top: -40px;
+      left: 0;
+      background: var(--cta);
+      color: #fff;
+      padding: 8px 16px;
+      border-radius: 0 0 8px 0;
+      font-size: 0.875rem;
+      font-weight: 600;
+      z-index: 9999;
+      transition: top var(--transition);
+    }
+    .skip-link:focus { top: 0; }
+
+    /* ─── Header ───────────────────────────────────────────── */
+    header {
+      background: var(--white);
+      box-shadow: var(--shadow-sm);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 2px solid var(--primary);
+    }
+
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 72px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--primary), var(--cta));
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .logo-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: 0.02em;
+    }
+
+    .logo-text span {
+      color: var(--cta);
+    }
+
+    .header-badge {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: var(--text);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border-radius: 999px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* ─── Hero ─────────────────────────────────────────────── */
+    .hero {
+      background: linear-gradient(160deg, var(--bg) 0%, #FFF0F5 50%, #F0FFF8 100%);
+      padding: 64px 24px 48px;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.2rem, 5vw, 3.5rem);
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--cta);
+    }
+
+    .hero p {
+      font-size: clamp(0.95rem, 2vw, 1.1rem);
+      color: var(--text-light);
+      font-weight: 400;
+      max-width: 560px;
+      margin: 0 auto 32px;
+      line-height: 1.7;
+    }
+
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      flex-wrap: wrap;
+    }
+
+    .hero-stat {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .hero-stat-value {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--cta);
+    }
+
+    .hero-stat-label {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--text-light);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    /* ─── Main Container ───────────────────────────────────── */
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+
+    /* ─── Tabs ─────────────────────────────────────────────── */
+    .tabs-wrapper {
+      background: var(--white);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+      margin-bottom: 40px;
+      border: 1.5px solid rgba(232, 180, 184, 0.3);
+    }
+
+    .tab-nav {
+      display: flex;
+      background: var(--bg3);
+      border-bottom: 2px solid rgba(232, 180, 184, 0.2);
+    }
+
+    .tab-btn {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 18px 16px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text-light);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      transition: all var(--transition);
+      position: relative;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+    }
+
+    .tab-btn:hover {
+      color: var(--text);
+      background: rgba(232, 180, 184, 0.1);
+    }
+
+    .tab-btn:focus-visible {
+      outline: 2px solid var(--cta);
+      outline-offset: -2px;
+    }
+
+    .tab-btn.active {
+      color: var(--text);
+      background: var(--white);
+      border-bottom-color: var(--cta);
+    }
+
+    .tab-btn svg {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+
+    .tab-content {
+      display: none;
+      padding: 36px 40px 40px;
+    }
+
+    .tab-content.active { display: block; }
+
+    @media (max-width: 600px) {
+      .tab-content { padding: 24px 20px 28px; }
+      .tab-btn { font-size: 0.75rem; padding: 14px 8px; gap: 5px; }
+      .tab-btn svg { display: none; }
+    }
+
+    /* ─── Form Elements ────────────────────────────────────── */
+    .field-group {
+      margin-bottom: 24px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 8px;
+      letter-spacing: 0.02em;
+    }
+
+    .label-hint {
+      font-weight: 400;
+      color: var(--text-light);
+      font-size: 0.8rem;
+      margin-left: 6px;
+    }
+
+    input[type="url"],
+    input[type="text"],
+    textarea {
+      width: 100%;
+      padding: 14px 18px;
+      background: var(--bg);
+      border: 2px solid rgba(232, 180, 184, 0.4);
+      border-radius: var(--radius-md);
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.95rem;
+      color: var(--text);
+      transition: border-color var(--transition), box-shadow var(--transition);
+      outline: none;
+    }
+
+    input[type="url"]:focus,
+    input[type="text"]:focus,
+    textarea:focus {
+      border-color: var(--cta);
+      box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
+    }
+
+    textarea {
+      min-height: 220px;
+      resize: vertical;
+      line-height: 1.6;
+    }
+
+    /* URL row */
+    .url-row {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .url-row input { flex: 1; }
+
+    @media (max-width: 600px) {
+      .url-row { flex-direction: column; }
+      .url-row input { width: 100%; }
+    }
+
+    /* ─── Buttons ──────────────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px 28px;
+      border: none;
+      border-radius: var(--radius-md);
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.875rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all var(--transition-slow);
+      white-space: nowrap;
+      outline: none;
+    }
+
+    .btn:focus-visible {
+      outline: 2px solid var(--cta);
+      outline-offset: 3px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--cta), #C9A227);
+      color: #fff;
+      box-shadow: 0 4px 16px rgba(212, 175, 55, 0.35);
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(212, 175, 55, 0.45);
+    }
+
+    .btn-primary:active:not(:disabled) {
+      transform: translateY(0);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn-secondary {
+      background: var(--white);
+      color: var(--text);
+      border: 2px solid var(--primary);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-secondary:hover {
+      background: var(--bg3);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .btn svg { width: 16px; height: 16px; }
+
+    /* ─── File Upload ──────────────────────────────────────── */
+    .upload-zone {
+      border: 2px dashed rgba(232, 180, 184, 0.6);
+      border-radius: var(--radius-lg);
+      background: linear-gradient(135deg, rgba(232,180,184,0.05), rgba(168,213,186,0.05));
+      padding: 48px 32px;
+      text-align: center;
+      cursor: pointer;
+      transition: all var(--transition);
+      position: relative;
+    }
+
+    .upload-zone:hover, .upload-zone.drag-over {
+      border-color: var(--cta);
+      background: linear-gradient(135deg, rgba(212,175,55,0.06), rgba(168,213,186,0.08));
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .upload-zone input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .upload-icon {
+      width: 56px;
+      height: 56px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .upload-icon svg { width: 26px; height: 26px; color: var(--text); }
+
+    .upload-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .upload-hint {
+      font-size: 0.85rem;
+      color: var(--text-light);
+      font-weight: 400;
+    }
+
+    .upload-file-info {
+      margin-top: 16px;
+      padding: 12px 18px;
+      background: rgba(168, 213, 186, 0.15);
+      border: 1.5px solid rgba(168, 213, 186, 0.4);
+      border-radius: var(--radius-sm);
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text);
+      display: none;
+    }
+
+    .upload-file-info.visible { display: flex; align-items: center; gap: 8px; }
+
+    /* ─── Analyze actions row ──────────────────────────────── */
+    .analyze-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+
+    .char-count {
+      font-size: 0.8rem;
+      color: var(--text-light);
+      font-weight: 500;
+    }
+
+    /* ─── Loading State ────────────────────────────────────── */
+    .loading-bar {
+      display: none;
+      margin-top: 20px;
+      background: var(--bg3);
+      border-radius: 999px;
+      height: 4px;
+      overflow: hidden;
+    }
+
+    .loading-bar.visible { display: block; }
+
+    .loading-bar-inner {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--primary), var(--cta), var(--secondary));
+      border-radius: 999px;
+      transition: width 0.4s ease;
+      animation: loading-pulse 1.5s ease-in-out infinite;
+    }
+
+    @keyframes loading-pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+
+    .status-msg {
+      font-size: 0.85rem;
+      color: var(--text-light);
+      font-weight: 500;
+      margin-top: 10px;
+      min-height: 20px;
+      text-align: center;
+    }
+
+    .status-msg.error {
+      color: #E74C3C;
+    }
+
+    /* ─── Results Section ──────────────────────────────────── */
+    #results {
+      display: none;
+      animation: fadeSlideUp 0.5s ease;
+    }
+
+    #results.visible { display: block; }
+
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .results-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    @media (max-width: 768px) {
+      .results-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ─── Score Card ───────────────────────────────────────── */
+    .score-card {
+      background: var(--white);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-lg);
+      padding: 40px 32px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      border: 1.5px solid rgba(232, 180, 184, 0.25);
+    }
+
+    .score-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: var(--score-color, var(--cta));
+      transition: background var(--transition-slow);
+    }
+
+    .score-section-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-light);
+      margin-bottom: 24px;
+    }
+
+    /* SVG Ring */
+    .ring-container {
+      position: relative;
+      width: 200px;
+      height: 200px;
+      margin: 0 auto 24px;
+    }
+
+    .ring-svg {
+      width: 200px;
+      height: 200px;
+      transform: rotate(-90deg);
+    }
+
+    .ring-track {
+      fill: none;
+      stroke: rgba(45, 52, 54, 0.07);
+      stroke-width: 12;
+    }
+
+    .ring-fill {
+      fill: none;
+      stroke: var(--score-color, var(--cta));
+      stroke-width: 12;
+      stroke-linecap: round;
+      stroke-dasharray: 565.49;
+      stroke-dashoffset: 565.49;
+      transition: stroke-dashoffset 1.2s cubic-bezier(0.4, 0, 0.2, 1),
+                  stroke var(--transition-slow),
+                  filter var(--transition-slow);
+      filter: drop-shadow(0 0 8px var(--score-color, var(--cta)));
+    }
+
+    .ring-center {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .ring-score {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3rem;
+      font-weight: 700;
+      line-height: 1;
+      color: var(--score-color, var(--text));
+      transition: color var(--transition-slow);
+    }
+
+    .ring-score-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-light);
+      margin-top: 4px;
+    }
+
+    .category-label {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--score-color, var(--text));
+      margin-bottom: 8px;
+      transition: color var(--transition-slow);
+    }
+
+    .category-desc {
+      font-size: 0.875rem;
+      color: var(--text-light);
+      font-weight: 400;
+      max-width: 260px;
+      margin: 0 auto 20px;
+      line-height: 1.6;
+    }
+
+    .confidence-bar-wrap {
+      background: var(--bg);
+      border-radius: 999px;
+      height: 8px;
+      overflow: hidden;
+      margin: 8px 0 4px;
+    }
+
+    .confidence-bar {
+      height: 100%;
+      background: var(--score-color, var(--cta));
+      border-radius: 999px;
+      width: 0%;
+      transition: width 1.2s cubic-bezier(0.4,0,0.2,1) 0.3s;
+      opacity: 0.7;
+    }
+
+    .confidence-label {
+      font-size: 0.78rem;
+      color: var(--text-light);
+      font-weight: 500;
+    }
+
+    /* ─── Signals Panel ────────────────────────────────────── */
+    .signals-card {
+      background: var(--white);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-md);
+      padding: 32px;
+      border: 1.5px solid rgba(232, 180, 184, 0.25);
+    }
+
+    .signals-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .signals-title svg { width: 20px; height: 20px; color: var(--cta); }
+
+    .signal-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: var(--radius-sm);
+      margin-bottom: 8px;
+      background: var(--bg);
+      border: 1.5px solid transparent;
+      transition: all var(--transition);
+    }
+
+    .signal-item:last-child { margin-bottom: 0; }
+
+    .signal-item.triggered {
+      background: rgba(232, 180, 184, 0.12);
+      border-color: rgba(232, 180, 184, 0.4);
+    }
+
+    .signal-item.not-triggered {
+      opacity: 0.55;
+    }
+
+    .signal-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      background: rgba(45,52,54,0.15);
+    }
+
+    .signal-item.triggered .signal-dot {
+      background: var(--score-color, var(--cta));
+      box-shadow: 0 0 6px var(--score-color, var(--cta));
+    }
+
+    .signal-text {
+      flex: 1;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .signal-weight {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--score-color, var(--text-light));
+      background: rgba(212,175,55,0.1);
+      padding: 2px 10px;
+      border-radius: 999px;
+      transition: color var(--transition-slow);
+    }
+
+    .signal-item.not-triggered .signal-weight {
+      color: var(--text-light);
+      background: transparent;
+    }
+
+    /* ─── Summary Card ─────────────────────────────────────── */
+    .summary-card {
+      background: linear-gradient(135deg, rgba(232,180,184,0.1), rgba(168,213,186,0.1));
+      border: 1.5px solid rgba(232, 180, 184, 0.3);
+      border-radius: var(--radius-lg);
+      padding: 24px 28px;
+      margin-top: 24px;
+    }
+
+    .summary-card h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .summary-card h3 svg { width: 18px; height: 18px; color: var(--cta); }
+
+    .summary-text {
+      font-size: 0.9rem;
+      color: var(--text-light);
+      line-height: 1.7;
+    }
+
+    /* Triggered count badge */
+    .triggered-count {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--score-color, var(--cta));
+      color: #fff;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 999px;
+      letter-spacing: 0.04em;
+      margin-left: auto;
+    }
+
+    /* ─── Footer ───────────────────────────────────────────── */
+    footer {
+      text-align: center;
+      padding: 40px 24px;
+      border-top: 1.5px solid rgba(232, 180, 184, 0.2);
+      background: var(--white);
+    }
+
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .footer-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .footer-logo span { color: var(--cta); }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .footer-links a {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--text-light);
+      text-decoration: none;
+      transition: color var(--transition);
+      cursor: pointer;
+    }
+
+    .footer-links a:hover { color: var(--cta); }
+
+    .footer-note {
+      font-size: 0.78rem;
+      color: var(--text-light);
+      opacity: 0.7;
+    }
+
+    /* ─── How it works section ─────────────────────────────── */
+    .how-section {
+      padding: 48px 0 0;
+    }
+
+    .how-section h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+
+    .how-section p.sub {
+      text-align: center;
+      font-size: 0.95rem;
+      color: var(--text-light);
+      margin-bottom: 36px;
+    }
+
+    .how-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .how-grid { grid-template-columns: 1fr; }
+    }
+
+    .how-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 28px 24px;
+      box-shadow: var(--shadow-sm);
+      border: 1.5px solid rgba(232, 180, 184, 0.2);
+      transition: all var(--transition-slow);
+    }
+
+    .how-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .how-card-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .how-card-icon.pink  { background: linear-gradient(135deg, #FDEAEA, #E8B4B8); }
+    .how-card-icon.green { background: linear-gradient(135deg, #F0FFF8, #A8D5BA); }
+    .how-card-icon.gold  { background: linear-gradient(135deg, #FFFBF0, #D4AF37); }
+
+    .how-card-icon svg { width: 24px; height: 24px; color: var(--text); }
+
+    .how-card h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .how-card p {
+      font-size: 0.875rem;
+      color: var(--text-light);
+      line-height: 1.65;
+      font-weight: 400;
+    }
+
+    /* ─── Category legend ──────────────────────────────────── */
+    .legend-section {
+      margin-top: 48px;
+      background: var(--white);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-sm);
+      padding: 32px;
+      border: 1.5px solid rgba(232, 180, 184, 0.2);
+    }
+
+    .legend-section h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.35rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .legend-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+
+    @media (max-width: 768px) {
+      .legend-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 480px) {
+      .legend-grid { grid-template-columns: 1fr; }
+    }
+
+    .legend-item {
+      padding: 18px 16px;
+      border-radius: var(--radius-md);
+      border: 2px solid;
+      text-align: center;
+      transition: transform var(--transition);
+    }
+
+    .legend-item:hover { transform: translateY(-2px); }
+
+    .legend-item.vibe  { border-color: var(--vibe);  background: rgba(46,204,113,0.06); }
+    .legend-item.sus   { border-color: var(--sus);   background: rgba(243,156,18,0.06); }
+    .legend-item.mixed { border-color: var(--mixed); background: rgba(230,126,34,0.06); }
+    .legend-item.human { border-color: var(--human); background: rgba(231,76,60,0.06); }
+
+    .legend-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      margin: 0 auto 10px;
+    }
+
+    .legend-item.vibe  .legend-dot { background: var(--vibe);  box-shadow: 0 0 8px var(--vibe); }
+    .legend-item.sus   .legend-dot { background: var(--sus);   box-shadow: 0 0 8px var(--sus); }
+    .legend-item.mixed .legend-dot { background: var(--mixed); box-shadow: 0 0 8px var(--mixed); }
+    .legend-item.human .legend-dot { background: var(--human); box-shadow: 0 0 8px var(--human); }
+
+    .legend-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+      color: var(--text);
+    }
+
+    .legend-range {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-light);
+      margin-bottom: 4px;
+    }
+
+    .legend-desc {
+      font-size: 0.78rem;
+      color: var(--text-light);
+      font-weight: 400;
+    }
+
+    /* ─── Toast notification ───────────────────────────────── */
+    #toast {
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      background: var(--text);
+      color: var(--white);
+      padding: 14px 22px;
+      border-radius: var(--radius-md);
+      font-size: 0.875rem;
+      font-weight: 500;
+      box-shadow: var(--shadow-lg);
+      z-index: 9999;
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      pointer-events: none;
+    }
+
+    #toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ─── Divider ──────────────────────────────────────────── */
+    .section-divider {
+      border: none;
+      border-top: 1.5px solid rgba(232, 180, 184, 0.2);
+      margin: 48px 0;
+    }
+
+    /* ─── Responsive padding ───────────────────────────────── */
+    @media (max-width: 480px) {
+      .hero { padding: 40px 16px 32px; }
+      main { padding: 0 16px 60px; }
+    }
+  </style>
+</head>
+<body>
+
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <!-- ─── Header ─────────────────────────────────────────── -->
+  <header role="banner">
+    <div class="header-inner">
+      <a class="logo" href="#" aria-label="AiCHECKER home">
+        <div class="logo-icon">
+          <!-- Heroicons: cpu-chip -->
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="#fff" width="22" height="22">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 19.5V21M12 3v1.5m0 15V21m3.75-18v1.5m0 15V21m-9-1.5h10.5a2.25 2.25 0 0 0 2.25-2.25V6.75a2.25 2.25 0 0 0-2.25-2.25H6.75A2.25 2.25 0 0 0 4.5 6.75v10.5a2.25 2.25 0 0 0 2.25 2.25Zm.75-12h9v9h-9v-9Z"/>
+          </svg>
+        </div>
+        <span class="logo-text">Ai<span>CHECKER</span></span>
+      </a>
+      <div class="header-badge">Free · No Login · Browser Only</div>
+    </div>
+  </header>
+
+  <!-- ─── Hero ───────────────────────────────────────────── -->
+  <section class="hero" aria-label="Introduction">
+    <h1>Detect <em>AI-Generated</em><br>Content Instantly</h1>
+    <p>Paste text, upload a file, or enter a URL. Our heuristic engine analyses writing patterns and code signals — no API key, no data upload, 100% private.</p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <span class="hero-stat-value">18+</span>
+        <span class="hero-stat-label">Signal Checks</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-value">100%</span>
+        <span class="hero-stat-label">Browser-Side</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-value">Free</span>
+        <span class="hero-stat-label">Always & Forever</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Main ───────────────────────────────────────────── -->
+  <main id="main-content">
+
+    <!-- ── Tabs ──────────────────────────────────────────── -->
+    <div class="tabs-wrapper" role="region" aria-label="Input method">
+
+      <div class="tab-nav" role="tablist" aria-label="Input tabs">
+        <button class="tab-btn active" role="tab" aria-selected="true"  aria-controls="tab-url"  id="btn-url"  onclick="switchTab('url')">
+          <!-- globe-alt -->
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5a17.92 17.92 0 0 1-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-1.605.42-3.113 1.157-4.418"/></svg>
+          URL
+        </button>
+        <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-paste" id="btn-paste" onclick="switchTab('paste')">
+          <!-- document-text -->
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"/></svg>
+          Paste Text
+        </button>
+        <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-upload" id="btn-upload" onclick="switchTab('upload')">
+          <!-- arrow-up-tray -->
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5"/></svg>
+          Upload File
+        </button>
+      </div>
+
+      <!-- Tab: URL -->
+      <div class="tab-content active" id="tab-url" role="tabpanel" aria-labelledby="btn-url">
+        <div class="field-group">
+          <label for="url-input">
+            Website URL
+            <span class="label-hint">We fetch and strip the HTML server-side via allorigins.win</span>
+          </label>
+          <div class="url-row">
+            <input type="url" id="url-input" placeholder="https://example.com/article" autocomplete="url" />
+            <button class="btn btn-primary" onclick="fetchURL()" id="fetch-btn" aria-label="Fetch and analyse URL">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"/></svg>
+              Analyse
+            </button>
+          </div>
+        </div>
+        <div class="loading-bar" id="url-loader"><div class="loading-bar-inner" id="url-loader-inner"></div></div>
+        <p class="status-msg" id="url-status" aria-live="polite"></p>
+      </div>
+
+      <!-- Tab: Paste -->
+      <div class="tab-content" id="tab-paste" role="tabpanel" aria-labelledby="btn-paste">
+        <div class="field-group">
+          <label for="paste-input">
+            Paste your text or code
+            <span class="label-hint">Minimum 100 characters for reliable results</span>
+          </label>
+          <textarea id="paste-input" placeholder="Paste article text, blog post, essay, code snippet, or any content you want to analyse…" oninput="updateCharCount()" aria-describedby="paste-char-count"></textarea>
+        </div>
+        <div class="analyze-row">
+          <span class="char-count" id="paste-char-count" aria-live="polite">0 characters</span>
+          <button class="btn btn-primary" onclick="analysePaste()" id="paste-btn" aria-label="Analyse pasted text">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 0 1-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 0 1 4.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0 1 12 15a9.065 9.065 0 0 0-6.23-.693L5 14.5m14.8.8 1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0 1 12 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5"/></svg>
+            Analyse Text
+          </button>
+          <button class="btn btn-secondary" onclick="clearPaste()" aria-label="Clear pasted text">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"/></svg>
+            Clear
+          </button>
+        </div>
+        <p class="status-msg" id="paste-status" aria-live="polite"></p>
+      </div>
+
+      <!-- Tab: Upload -->
+      <div class="tab-content" id="tab-upload" role="tabpanel" aria-labelledby="btn-upload">
+        <div class="field-group">
+          <label>Upload File <span class="label-hint">.pdf, .txt, .html accepted</span></label>
+          <div class="upload-zone" id="upload-zone" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)">
+            <input type="file" accept=".pdf,.txt,.html,.htm" id="file-input" onchange="handleFileSelect(event)" aria-label="Choose file to upload" />
+            <div class="upload-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5"/></svg>
+            </div>
+            <p class="upload-title">Drop your file here</p>
+            <p class="upload-hint">or click to browse — .pdf · .txt · .html</p>
+          </div>
+          <div class="upload-file-info" id="file-info">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" width="16" height="16"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"/></svg>
+            <span id="file-info-name">No file selected</span>
+          </div>
+        </div>
+        <div class="analyze-row">
+          <button class="btn btn-primary" onclick="analyseFile()" id="file-btn" disabled aria-label="Analyse uploaded file">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 0 1-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 0 1 4.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0 1 12 15a9.065 9.065 0 0 0-6.23-.693L5 14.5m14.8.8 1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0 1 12 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5"/></svg>
+            Analyse File
+          </button>
+        </div>
+        <div class="loading-bar" id="file-loader"><div class="loading-bar-inner" id="file-loader-inner"></div></div>
+        <p class="status-msg" id="file-status" aria-live="polite"></p>
+      </div>
+    </div>
+
+    <!-- ── Results ────────────────────────────────────────── -->
+    <section id="results" aria-label="Analysis results" aria-live="polite">
+      <div class="results-grid">
+        <!-- Score card -->
+        <div class="score-card" id="score-card">
+          <p class="score-section-label">AI Detection Score</p>
+
+          <div class="ring-container" role="img" aria-label="Score ring">
+            <svg class="ring-svg" viewBox="0 0 200 200" aria-hidden="true">
+              <circle class="ring-track" cx="100" cy="100" r="90"/>
+              <circle class="ring-fill" id="ring-fill" cx="100" cy="100" r="90"/>
+            </svg>
+            <div class="ring-center">
+              <span class="ring-score" id="ring-score-num">—</span>
+              <span class="ring-score-label">/ 100</span>
+            </div>
+          </div>
+
+          <p class="category-label" id="category-label">—</p>
+          <p class="category-desc" id="category-desc">Run an analysis to see results.</p>
+
+          <div style="margin-top: 16px;">
+            <div class="confidence-bar-wrap">
+              <div class="confidence-bar" id="confidence-bar"></div>
+            </div>
+            <p class="confidence-label" id="confidence-label">Confidence level</p>
+          </div>
+        </div>
+
+        <!-- Signals -->
+        <div class="signals-card">
+          <h2 class="signals-title">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"/></svg>
+            Signal Breakdown
+            <span class="triggered-count" id="triggered-count" style="display:none"></span>
+          </h2>
+          <div id="signals-list" aria-label="Detected signals"></div>
+        </div>
+      </div>
+
+      <!-- Summary -->
+      <div class="summary-card" id="summary-card">
+        <h3>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 0 1 .865-.501 48.172 48.172 0 0 0 3.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z"/></svg>
+          Summary
+        </h3>
+        <p class="summary-text" id="summary-text">—</p>
+      </div>
+    </section>
+
+    <hr class="section-divider" />
+
+    <!-- ── How it works ───────────────────────────────────── -->
+    <section class="how-section" aria-label="How it works">
+      <h2>How It Works</h2>
+      <p class="sub">Three methods, one powerful heuristic engine — all processed in your browser.</p>
+      <div class="how-grid">
+        <div class="how-card">
+          <div class="how-card-icon pink">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12c0-1.232-.046-2.453-.138-3.662a4.006 4.006 0 0 0-3.7-3.7 48.678 48.678 0 0 0-7.324 0 4.006 4.006 0 0 0-3.7 3.7c-.017.22-.032.441-.046.662M19.5 12l3-3m-3 3-3-3m-12 3c0 1.232.046 2.453.138 3.662a4.006 4.006 0 0 0 3.7 3.7 48.656 48.656 0 0 0 7.324 0 4.006 4.006 0 0 0 3.7-3.7c.017-.22.032-.441.046-.662M4.5 12l3 3m-3-3-3 3"/></svg>
+          </div>
+          <h3>Text Pattern Analysis</h3>
+          <p>Detects repetitive sentence structures, overused AI filler phrases, passive voice saturation, and uniform paragraph lengths.</p>
+        </div>
+        <div class="how-card">
+          <div class="how-card-icon green">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75 22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3-4.5 16.5"/></svg>
+          </div>
+          <h3>Code Signal Detection</h3>
+          <p>Flags perfectly uniform indentation, generic variable names, missing debug leftovers, and excessive docstring coverage typical of AI-generated code.</p>
+        </div>
+        <div class="how-card">
+          <div class="how-card-icon gold">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M7.5 14.25v2.25m3-4.5v4.5m3-6.75v6.75m3-9v9M6 20.25h12A2.25 2.25 0 0 0 20.25 18V6A2.25 2.25 0 0 0 18 3.75H6A2.25 2.25 0 0 0 3.75 6v12A2.25 2.25 0 0 0 6 20.25Z"/></svg>
+          </div>
+          <h3>Weighted Scoring</h3>
+          <p>Each signal is weighted by impact. The final score uses a tanh-normalised formula to keep it honest: 30 + 45 × tanh(raw/30).</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Category Legend ────────────────────────────────── -->
+    <div class="legend-section">
+      <h2>Score Categories</h2>
+      <div class="legend-grid">
+        <div class="legend-item vibe">
+          <div class="legend-dot"></div>
+          <p class="legend-name">Vibe Coded</p>
+          <p class="legend-range">Above 72</p>
+          <p class="legend-desc">Strongly AI-generated patterns</p>
+        </div>
+        <div class="legend-item sus">
+          <div class="legend-dot"></div>
+          <p class="legend-name">Suspicious</p>
+          <p class="legend-range">50 – 72</p>
+          <p class="legend-desc">Multiple AI signals detected</p>
+        </div>
+        <div class="legend-item mixed">
+          <div class="legend-dot"></div>
+          <p class="legend-name">Mixed Signals</p>
+          <p class="legend-range">35 – 50</p>
+          <p class="legend-desc">Inconclusive, needs review</p>
+        </div>
+        <div class="legend-item human">
+          <div class="legend-dot"></div>
+          <p class="legend-name">Certified Human</p>
+          <p class="legend-range">Below 35</p>
+          <p class="legend-desc">Likely human-authored content</p>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ─── Footer ─────────────────────────────────────────── -->
+  <footer role="contentinfo">
+    <div class="footer-inner">
+      <p class="footer-logo">Ai<span>CHECKER</span></p>
+      <nav class="footer-links" aria-label="Footer links">
+        <a onclick="scrollToTop()">Back to top</a>
+        <a href="https://github.com/shariquetelco/aichecker" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="https://vercel.com" target="_blank" rel="noopener noreferrer">Hosted on Vercel</a>
+      </nav>
+      <p class="footer-note">No data is transmitted. All analysis runs locally in your browser. &copy; 2025 AiCHECKER</p>
+    </div>
+  </footer>
+
+  <!-- ─── Toast ──────────────────────────────────────────── -->
+  <div id="toast" role="alert" aria-live="assertive"></div>
+
+  <!-- ─── JavaScript ─────────────────────────────────────── -->
+  <script>
+  // ── PDF.js worker ──────────────────────────────────────
+  if (typeof pdfjsLib !== 'undefined') {
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
+      'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  }
+
+  // ── Tab switching ──────────────────────────────────────
+  function switchTab(name) {
+    document.querySelectorAll('.tab-btn').forEach(b => {
+      b.classList.remove('active');
+      b.setAttribute('aria-selected', 'false');
+    });
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    document.getElementById('btn-' + name).classList.add('active');
+    document.getElementById('btn-' + name).setAttribute('aria-selected', 'true');
+    document.getElementById('tab-' + name).classList.add('active');
+  }
+
+  function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+
+  // ── Character count ────────────────────────────────────
+  function updateCharCount() {
+    const v = document.getElementById('paste-input').value;
+    document.getElementById('paste-char-count').textContent =
+      v.length.toLocaleString() + ' character' + (v.length !== 1 ? 's' : '');
+  }
+
+  function clearPaste() {
+    document.getElementById('paste-input').value = '';
+    updateCharCount();
+  }
+
+  // ── File upload ────────────────────────────────────────
+  let selectedFile = null;
+
+  function handleFileSelect(e) {
+    const f = e.target.files[0];
+    if (f) setFile(f);
+  }
+
+  function handleDragOver(e) {
+    e.preventDefault();
+    document.getElementById('upload-zone').classList.add('drag-over');
+  }
+
+  function handleDragLeave() {
+    document.getElementById('upload-zone').classList.remove('drag-over');
+  }
+
+  function handleDrop(e) {
+    e.preventDefault();
+    document.getElementById('upload-zone').classList.remove('drag-over');
+    const f = e.dataTransfer.files[0];
+    if (f) setFile(f);
+  }
+
+  function setFile(f) {
+    selectedFile = f;
+    const info = document.getElementById('file-info');
+    const size = f.size < 1024 ? f.size + ' B'
+               : f.size < 1048576 ? (f.size/1024).toFixed(1) + ' KB'
+               : (f.size/1048576).toFixed(1) + ' MB';
+    document.getElementById('file-info-name').textContent = f.name + '  ·  ' + size;
+    info.classList.add('visible');
+    document.getElementById('file-btn').disabled = false;
+    document.getElementById('file-status').textContent = '';
+    document.getElementById('file-status').className = 'status-msg';
+  }
+
+  // ── URL fetch ──────────────────────────────────────────
+  async function fetchURL() {
+    const raw = document.getElementById('url-input').value.trim();
+    if (!raw) { showToast('Please enter a URL first.'); return; }
+
+    let url;
+    try { url = new URL(raw); }
+    catch { showToast('Please enter a valid URL including https://'); return; }
+
+    setStatus('url-status', 'Fetching page…', false);
+    showLoader('url-loader', 'url-loader-inner');
+    document.getElementById('fetch-btn').disabled = true;
+
+    try {
+      const proxy = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url.href);
+      const res   = await fetch(proxy, { signal: AbortSignal.timeout(15000) });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const html = await res.text();
+      const text = extractTextFromHTML(html);
+      if (text.length < 80) throw new Error('Too little text found on that page.');
+      setStatus('url-status', 'Analysing ' + text.length.toLocaleString() + ' characters…', false);
+      await delay(300);
+      runAnalysis(text);
+      setStatus('url-status', 'Done.', false);
+    } catch(err) {
+      const msg = err.name === 'TimeoutError'
+        ? 'Request timed out. The site may be blocking cross-origin requests.'
+        : err.message || 'Failed to fetch the page.';
+      setStatus('url-status', msg, true);
+    } finally {
+      hideLoader('url-loader', 'url-loader-inner');
+      document.getElementById('fetch-btn').disabled = false;
+    }
+  }
+
+  function extractTextFromHTML(html) {
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    ['script','style','nav','header','footer','aside','noscript'].forEach(tag => {
+      doc.querySelectorAll(tag).forEach(el => el.remove());
+    });
+    return (doc.body?.innerText || doc.body?.textContent || '').replace(/\s+/g, ' ').trim();
+  }
+
+  // ── Paste analysis ─────────────────────────────────────
+  function analysePaste() {
+    const text = document.getElementById('paste-input').value.trim();
+    if (text.length < 80) {
+      setStatus('paste-status', 'Please paste at least 80 characters for reliable analysis.', true);
+      return;
+    }
+    setStatus('paste-status', 'Analysing…', false);
+    runAnalysis(text);
+    setStatus('paste-status', 'Done.', false);
+  }
+
+  // ── File analysis ──────────────────────────────────────
+  async function analyseFile() {
+    if (!selectedFile) return;
+    const ext = selectedFile.name.split('.').pop().toLowerCase();
+    showLoader('file-loader', 'file-loader-inner');
+    setStatus('file-status', 'Reading file…', false);
+    document.getElementById('file-btn').disabled = true;
+
+    try {
+      let text = '';
+      if (ext === 'pdf') {
+        text = await extractPDF(selectedFile);
+      } else {
+        text = await readFileAsText(selectedFile);
+        if (ext === 'html' || ext === 'htm') text = extractTextFromHTML(text);
+      }
+      if (text.length < 80) throw new Error('Not enough readable text in this file.');
+      setStatus('file-status', 'Analysing ' + text.length.toLocaleString() + ' characters…', false);
+      await delay(300);
+      runAnalysis(text);
+      setStatus('file-status', 'Done.', false);
+    } catch(err) {
+      setStatus('file-status', err.message || 'Could not read file.', true);
+    } finally {
+      hideLoader('file-loader', 'file-loader-inner');
+      document.getElementById('file-btn').disabled = false;
+    }
+  }
+
+  function readFileAsText(file) {
+    return new Promise((res, rej) => {
+      const r = new FileReader();
+      r.onload  = e => res(e.target.result);
+      r.onerror = () => rej(new Error('Failed to read file.'));
+      r.readAsText(file, 'UTF-8');
+    });
+  }
+
+  async function extractPDF(file) {
+    if (typeof pdfjsLib === 'undefined') throw new Error('PDF.js not loaded. Try a text file instead.');
+    const buf   = await file.arrayBuffer();
+    const pdf   = await pdfjsLib.getDocument({ data: buf }).promise;
+    let out = '';
+    for (let i = 1; i <= Math.min(pdf.numPages, 30); i++) {
+      const page  = await pdf.getPage(i);
+      const tc    = await page.getTextContent();
+      out += tc.items.map(s => s.str).join(' ') + '\n';
+    }
+    return out.replace(/\s+/g, ' ').trim();
+  }
+
+  // ── Helpers ────────────────────────────────────────────
+  function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+  function setStatus(id, msg, isError) {
+    const el = document.getElementById(id);
+    el.textContent = msg;
+    el.className = 'status-msg' + (isError ? ' error' : '');
+  }
+
+  function showLoader(barId, innerId) {
+    const bar = document.getElementById(barId);
+    bar.classList.add('visible');
+    let w = 0;
+    const t = setInterval(() => {
+      w = Math.min(w + Math.random() * 12, 88);
+      document.getElementById(innerId).style.width = w + '%';
+    }, 280);
+    bar._timer = t;
+  }
+
+  function hideLoader(barId, innerId) {
+    const bar = document.getElementById(barId);
+    clearInterval(bar._timer);
+    document.getElementById(innerId).style.width = '100%';
+    setTimeout(() => {
+      bar.classList.remove('visible');
+      document.getElementById(innerId).style.width = '0%';
+    }, 500);
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3200);
+  }
+
+  // ════════════════════════════════════════════════════════
+  //   ANALYSIS ENGINE
+  // ════════════════════════════════════════════════════════
+
+  // Signal definitions: { id, label, weight, check(text) }
+  const SIGNALS = [
+    // ── Text signals ─────────────────────────────────────
+    {
+      id: 'filler',
+      label: 'AI filler phrases detected',
+      weight: 12,
+      check(t) {
+        const phrases = [
+          'in today\'s world','it is important to note','it is worth noting',
+          'leveraging','furthermore','seamless','robust','cutting-edge',
+          'delve into','dive into','in conclusion','in summary',
+          'as a result','it goes without saying','needless to say',
+          'at the end of the day','first and foremost','last but not least',
+          'comprehensive','utilize','facilitate','paradigm','synergy',
+          'holistic','streamline','unlock the potential','game-changer',
+          'innovative','groundbreaking','state-of-the-art','best practices'
+        ];
+        const low = t.toLowerCase();
+        const hits = phrases.filter(p => low.includes(p)).length;
+        return hits >= 3 ? hits / phrases.length : 0;
+      }
+    },
+    {
+      id: 'passive',
+      label: 'High passive voice usage',
+      weight: 9,
+      check(t) {
+        const passiveRe = /\b(is|are|was|were|be|been|being)\s+([\w]+ed|[\w]+en)\b/gi;
+        const sentences = t.split(/[.!?]+/).filter(s => s.trim().length > 10);
+        if (!sentences.length) return 0;
+        let passiveCount = 0;
+        sentences.forEach(s => { if (passiveRe.test(s)) passiveCount++; });
+        const ratio = passiveCount / sentences.length;
+        return ratio > 0.35 ? Math.min((ratio - 0.35) / 0.3, 1) : 0;
+      }
+    },
+    {
+      id: 'uniform_paragraphs',
+      label: 'Suspiciously uniform paragraph lengths',
+      weight: 10,
+      check(t) {
+        const paras = t.split(/\n\n+/).map(p => p.trim()).filter(p => p.length > 40);
+        if (paras.length < 3) return 0;
+        const lens = paras.map(p => p.length);
+        const mean = lens.reduce((a, b) => a + b, 0) / lens.length;
+        const stddev = Math.sqrt(lens.map(l => (l - mean)**2).reduce((a, b) => a + b, 0) / lens.length);
+        const cv = stddev / mean; // coefficient of variation
+        return cv < 0.2 ? (0.2 - cv) / 0.2 : 0;
+      }
+    },
+    {
+      id: 'no_contractions',
+      label: 'No contractions or informal language',
+      weight: 8,
+      check(t) {
+        const contractions = /\b(i'm|i've|i'd|i'll|you're|you've|you'd|you'll|he's|she's|it's|we're|we've|we'd|we'll|they're|they've|they'd|they'll|isn't|aren't|wasn't|weren't|don't|doesn't|didn't|can't|couldn't|won't|wouldn't|shouldn't|haven't|hasn't|hadn't|that's|there's|here's|let's|who's|what's)\b/gi;
+        const words = t.split(/\s+/).length;
+        if (words < 80) return 0;
+        const hits = (t.match(contractions) || []).length;
+        const density = hits / (words / 100);
+        return density < 0.5 ? (0.5 - density) / 0.5 : 0;
+      }
+    },
+    {
+      id: 'transition_words',
+      label: 'Excessive transition word density',
+      weight: 8,
+      check(t) {
+        const transitions = ['additionally','moreover','however','nevertheless','therefore','consequently','subsequently','accordingly','meanwhile','nonetheless','in addition','on the other hand','in contrast','as a result','for instance','for example','in particular','specifically','notably'];
+        const words = t.split(/\s+/).length;
+        const low = t.toLowerCase();
+        const hits = transitions.filter(tr => low.includes(tr)).length;
+        const density = hits / (words / 100);
+        return density > 1.5 ? Math.min((density - 1.5) / 2, 1) : 0;
+      }
+    },
+    {
+      id: 'repetitive_structure',
+      label: 'Repetitive sentence opening structure',
+      weight: 10,
+      check(t) {
+        const sentences = t.match(/[A-Z][^.!?]*[.!?]/g) || [];
+        if (sentences.length < 5) return 0;
+        const starters = sentences.map(s => s.trim().split(/\s+/).slice(0, 2).join(' ').toLowerCase());
+        const freq = {};
+        starters.forEach(s => { freq[s] = (freq[s] || 0) + 1; });
+        const repeated = Object.values(freq).filter(c => c > 1).reduce((a, b) => a + b, 0);
+        const ratio = repeated / sentences.length;
+        return ratio > 0.3 ? Math.min((ratio - 0.3) / 0.4, 1) : 0;
+      }
+    },
+    {
+      id: 'no_typos',
+      label: 'Zero typos, errors, or informal markers',
+      weight: 7,
+      check(t) {
+        const informal = /\b(gonna|wanna|gotta|kinda|sorta|lol|lmao|omg|tbh|imo|imho|btw|ngl|idk|smh|rn|tbf|fwiw|irl|afaik|aka|fyi)\b/gi;
+        const words = t.split(/\s+/).length;
+        if (words < 60) return 0;
+        const hits = (t.match(informal) || []).length;
+        return hits === 0 && words > 150 ? 0.75 : 0;
+      }
+    },
+    {
+      id: 'bullet_pattern',
+      label: 'Intro → bullets → conclusion pattern',
+      weight: 9,
+      check(t) {
+        const bulletRe = /^[\s]*[-•*]\s+.{10,}/m;
+        const hasBullets = bulletRe.test(t);
+        if (!hasBullets) return 0;
+        const hasIntro = /^.{40,200}[.:][\s\n]/m.test(t);
+        const hasConcl = /\b(in conclusion|in summary|to summarize|overall|ultimately|in closing)\b/i.test(t);
+        return (hasBullets ? 0.4 : 0) + (hasIntro ? 0.3 : 0) + (hasConcl ? 0.3 : 0);
+      }
+    },
+
+    // ── Code signals ──────────────────────────────────────
+    {
+      id: 'generic_vars',
+      label: 'Generic variable names (data, result, response)',
+      weight: 11,
+      check(t) {
+        const codeRe = /\b(function|def |class |const |let |var |import |from |=>|async |await )\b/;
+        if (!codeRe.test(t)) return 0;
+        const genericRe = /\b(data|result|response|item|items|temp|tmp|value|values|obj|arr|list|output|input|payload|config|options|params|args)\b/g;
+        const words = t.split(/\s+/).length;
+        const hits = (t.match(genericRe) || []).length;
+        const density = hits / (words / 100);
+        return density > 2 ? Math.min((density - 2) / 4, 1) : 0;
+      }
+    },
+    {
+      id: 'uniform_indent',
+      label: 'Perfectly uniform indentation (no inconsistencies)',
+      weight: 10,
+      check(t) {
+        const codeRe = /\b(function|def |class |const |let |var |import )\b/;
+        if (!codeRe.test(t)) return 0;
+        const lines = t.split('\n').filter(l => /^\s+\S/.test(l));
+        if (lines.length < 6) return 0;
+        const indents = lines.map(l => l.match(/^(\s+)/)?.[1].length || 0);
+        const uniqueIndents = [...new Set(indents)];
+        if (uniqueIndents.length < 2) return 0;
+        const gcd = (a, b) => b === 0 ? a : gcd(b, a % b);
+        const g = indents.filter(i => i > 0).reduce(gcd);
+        const allMultiple = indents.filter(i => i > 0).every(i => i % g === 0);
+        return allMultiple ? 0.8 : 0;
+      }
+    },
+    {
+      id: 'no_debug',
+      label: 'No commented-out code or debug leftovers',
+      weight: 8,
+      check(t) {
+        const codeRe = /\b(function|def |class |const |let |var |=>)\b/;
+        if (!codeRe.test(t)) return 0;
+        const debugRe = /\/\/\s*(TODO|FIXME|HACK|XXX|console\.log|debug|test|temp|old|remove|cleanup)/i;
+        const multiLineComment = /\/\*[\s\S]*?\*\//g;
+        const comments = t.match(multiLineComment) || [];
+        const hasDebug = debugRe.test(t);
+        if (hasDebug) return 0;
+        const lines = t.split('\n').length;
+        return lines > 15 && !hasDebug ? 0.65 : 0;
+      }
+    },
+    {
+      id: 'docstrings',
+      label: 'Every function has docstring / header comment',
+      weight: 9,
+      check(t) {
+        const codeRe = /\b(function|def |class )\b/g;
+        const funcMatches = t.match(codeRe) || [];
+        if (funcMatches.length < 2) return 0;
+        const docRe = /(\/\*\*[\s\S]*?\*\/|"""[\s\S]*?"""|'''[\s\S]*?'''|\/\/\/\s*\S)/g;
+        const docMatches = t.match(docRe) || [];
+        const ratio = docMatches.length / funcMatches.length;
+        return ratio > 0.7 ? Math.min(ratio, 1) : 0;
+      }
+    },
+    {
+      id: 'header_comments',
+      label: 'File-level header comments on every file',
+      weight: 6,
+      check(t) {
+        const headerRe = /^[\s]*(\/\*[\s\S]{10,200}\*\/|#![\s\S]{5,80}\n|<!--[\s\S]{5,200}-->)/;
+        return headerRe.test(t.slice(0, 500)) ? 0.7 : 0;
+      }
+    },
+
+    // ── Prose quality signals ─────────────────────────────
+    {
+      id: 'vocab_variety',
+      label: 'Low vocabulary variety (repetitive word choice)',
+      weight: 9,
+      check(t) {
+        const words = t.toLowerCase().match(/\b[a-z]{4,}\b/g) || [];
+        if (words.length < 50) return 0;
+        const unique = new Set(words).size;
+        const ratio  = unique / words.length;
+        return ratio < 0.45 ? (0.45 - ratio) / 0.3 : 0;
+      }
+    },
+    {
+      id: 'sentence_length',
+      label: 'Overly consistent sentence lengths',
+      weight: 7,
+      check(t) {
+        const sentences = t.split(/[.!?]+/).map(s => s.trim()).filter(s => s.length > 20);
+        if (sentences.length < 6) return 0;
+        const lens = sentences.map(s => s.split(/\s+/).length);
+        const mean = lens.reduce((a, b) => a + b, 0) / lens.length;
+        const stddev = Math.sqrt(lens.map(l => (l - mean) ** 2).reduce((a, b) => a + b, 0) / lens.length);
+        const cv = stddev / mean;
+        return cv < 0.28 ? (0.28 - cv) / 0.28 : 0;
+      }
+    },
+    {
+      id: 'hedge_words',
+      label: 'Excessive hedging language',
+      weight: 6,
+      check(t) {
+        const hedgeRe = /\b(arguably|it can be said|one might|some may|it could be|there are those who|many would|it is widely|studies suggest|research shows|experts believe|it is generally)\b/gi;
+        const words = t.split(/\s+/).length;
+        const hits = (t.match(hedgeRe) || []).length;
+        const density = hits / (words / 100);
+        return density > 0.8 ? Math.min((density - 0.8) / 1.5, 1) : 0;
+      }
+    },
+    {
+      id: 'numbered_lists',
+      label: 'Structured numbered list overuse',
+      weight: 6,
+      check(t) {
+        const numberedRe = /^\s*\d+[.)]\s+.{10,}/mg;
+        const hits = (t.match(numberedRe) || []).length;
+        const words = t.split(/\s+/).length;
+        return hits >= 3 && hits / (words / 100) > 1 ? Math.min(hits / 12, 1) : 0;
+      }
+    }
+  ];
+
+  // ── Score formula ──────────────────────────────────────
+  function computeScore(text) {
+    const signalResults = SIGNALS.map(sig => {
+      const raw = sig.check(text);
+      const clamped = Math.max(0, Math.min(1, raw));
+      return { ...sig, triggered: clamped > 0.15, raw: clamped, contribution: clamped * sig.weight };
+    });
+
+    const maxRaw = SIGNALS.reduce((s, sig) => s + sig.weight, 0);
+    const rawSum = signalResults.reduce((s, r) => s + r.contribution, 0);
+    const rawScore = (rawSum / maxRaw) * 100;
+
+    const finalScore = 30 + 45 * Math.tanh(rawScore / 30);
+    return {
+      score: Math.round(finalScore * 10) / 10,
+      signals: signalResults
+    };
+  }
+
+  // ── Category ───────────────────────────────────────────
+  function getCategory(score) {
+    if (score > 72) return {
+      key: 'vibe', label: 'Vibe Coded',
+      color: '#2ECC71',
+      desc: 'Strong AI-generation patterns detected. This content exhibits many hallmarks of large language model output.'
+    };
+    if (score > 50) return {
+      key: 'sus', label: 'Suspicious',
+      color: '#F39C12',
+      desc: 'Multiple AI signals found. Could be AI-assisted, lightly edited AI output, or a highly polished writer.'
+    };
+    if (score > 35) return {
+      key: 'mixed', label: 'Mixed Signals',
+      color: '#E67E22',
+      desc: 'Inconclusive result. The content shows a blend of AI and human writing characteristics.'
+    };
+    return {
+      key: 'human', label: 'Certified Human',
+      color: '#E74C3C',
+      desc: 'Low AI signal density. Content shows natural variation, informal markers, and human writing patterns.'
+    };
+  }
+
+  // ── Generate summary ───────────────────────────────────
+  function buildSummary(score, signals, cat) {
+    const triggered = signals.filter(s => s.triggered);
+    const topSignals = triggered.sort((a, b) => b.contribution - a.contribution).slice(0, 3);
+    if (!triggered.length) {
+      return `Score of ${score} places this content in the "${cat.label}" category. No strong AI signals were detected across the ${signals.length} checks performed. The writing displays natural variation and informal language patterns consistent with human authorship.`;
+    }
+    const top = topSignals.map(s => s.label.toLowerCase()).join('; ');
+    return `Score of ${score} places this content in the "${cat.label}" category. The strongest contributing signals were: ${top}. A total of ${triggered.length} out of ${signals.length} checks were triggered. ${cat.desc}`;
+  }
+
+  // ── Render results ─────────────────────────────────────
+  function runAnalysis(text) {
+    const { score, signals } = computeScore(text);
+    const cat   = getCategory(score);
+    const triggered = signals.filter(s => s.triggered);
+
+    // Set CSS variable for score color
+    const root = document.documentElement;
+    root.style.setProperty('--score-color', cat.color);
+
+    // Update score card elements
+    document.getElementById('ring-score-num').textContent = score.toFixed(1);
+    document.getElementById('category-label').textContent = cat.label;
+    document.getElementById('category-desc').textContent  = cat.desc;
+
+    // Animate ring
+    const circumference = 2 * Math.PI * 90; // ≈ 565.49
+    const offset = circumference - (score / 100) * circumference;
+    const fill = document.getElementById('ring-fill');
+    fill.style.stroke = cat.color;
+    fill.style.filter = `drop-shadow(0 0 10px ${cat.color})`;
+    // Force reflow then animate
+    requestAnimationFrame(() => {
+      fill.style.strokeDashoffset = offset;
+    });
+
+    // Confidence bar
+    document.getElementById('confidence-bar').style.width = score + '%';
+    document.getElementById('confidence-bar').style.background = cat.color;
+    const conf = score > 72 || score < 35 ? 'High' : score > 60 || score < 42 ? 'Medium' : 'Low';
+    document.getElementById('confidence-label').textContent = conf + ' confidence · ' + triggered.length + ' of ' + signals.length + ' signals triggered';
+
+    // Signals list
+    const list = document.getElementById('signals-list');
+    list.innerHTML = '';
+    signals.sort((a, b) => b.triggered - a.triggered || b.contribution - a.contribution).forEach(sig => {
+      const div = document.createElement('div');
+      div.className = 'signal-item ' + (sig.triggered ? 'triggered' : 'not-triggered');
+      div.setAttribute('role', 'listitem');
+      div.innerHTML = `
+        <div class="signal-dot" aria-hidden="true"></div>
+        <span class="signal-text">${sig.label}</span>
+        <span class="signal-weight" aria-label="weight ${sig.weight}">${sig.triggered ? '+' + sig.weight : sig.weight}</span>
+      `;
+      list.appendChild(div);
+    });
+
+    // Triggered count badge
+    const badge = document.getElementById('triggered-count');
+    badge.textContent = triggered.length + ' triggered';
+    badge.style.background = cat.color;
+    badge.style.display = 'inline-flex';
+
+    // Summary
+    document.getElementById('summary-text').textContent = buildSummary(score, signals, cat);
+
+    // Show results
+    const resultsEl = document.getElementById('results');
+    resultsEl.classList.add('visible');
+    resultsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    showToast('Analysis complete — ' + cat.label);
+  }
+
+  // ── Key: Enter on URL input ────────────────────────────
+  document.getElementById('url-input').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') fetchURL();
+  });
+
+  // Init char count
+  updateCharCount();
+  </script>
+</body>
+</html>
