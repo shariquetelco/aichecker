@@ -626,6 +626,103 @@
     .footer-links a:hover { color: var(--accent2); }
     .footer-note { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--text-muted); opacity: 0.6; }
 
+    /* ── Free Forever Banner ─────────────────────────── */
+    .free-banner {
+      background: linear-gradient(90deg, rgba(123,97,255,0.08) 0%, rgba(0,255,136,0.06) 50%, rgba(123,97,255,0.08) 100%);
+      border-top: 1px solid rgba(123,97,255,0.15);
+      border-bottom: 1px solid rgba(123,97,255,0.15);
+      padding: 14px 24px;
+      position: relative; z-index: 1;
+    }
+    .free-banner-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: center;
+      gap: 0; flex-wrap: wrap;
+    }
+    .free-banner-item {
+      display: flex; align-items: center; gap: 7px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem; font-weight: 500;
+      color: var(--text-dim); letter-spacing: 0.04em;
+      padding: 4px 20px;
+    }
+    .free-banner-item svg { width: 14px; height: 14px; color: var(--neon); flex-shrink: 0; }
+    .free-banner-divider { width: 1px; height: 20px; background: var(--border); }
+    @media (max-width: 600px) {
+      .free-banner-item { font-size: 0.68rem; padding: 4px 10px; }
+      .free-banner-divider { display: none; }
+    }
+
+    /* ── GitHub tab specific ──────────────────────────── */
+    .gh-input-group { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 16px; }
+    .gh-input-group input { flex: 1; }
+    .gh-repo-info {
+      display: none; margin-bottom: 16px;
+      background: rgba(0,255,136,0.05);
+      border: 1px solid rgba(0,255,136,0.2);
+      border-radius: var(--r-md);
+      padding: 16px 18px;
+      gap: 16px; align-items: center;
+    }
+    .gh-repo-info.visible { display: flex; }
+    .gh-repo-avatar {
+      width: 48px; height: 48px; border-radius: 50%;
+      border: 2px solid rgba(0,255,136,0.3);
+      flex-shrink: 0;
+    }
+    .gh-repo-meta { flex: 1; min-width: 0; }
+    .gh-repo-name {
+      font-family: 'Orbitron', monospace; font-size: 0.85rem; font-weight: 700;
+      color: var(--neon); margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .gh-repo-desc { font-size: 0.82rem; color: var(--text-dim); line-height: 1.5; }
+    .gh-repo-tags { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+    .gh-tag {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; font-weight: 500;
+      padding: 2px 8px; border-radius: 4px;
+      background: rgba(123,97,255,0.12); border: 1px solid var(--border);
+      color: var(--accent2);
+    }
+    .gh-files-list {
+      margin-bottom: 16px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border);
+      border-radius: var(--r-md);
+      overflow: hidden;
+    }
+    .gh-files-header {
+      padding: 10px 14px; font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem; color: var(--text-muted); letter-spacing: 0.06em;
+      border-bottom: 1px solid var(--border);
+      background: rgba(255,255,255,0.02);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .gh-file-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 8px 14px; border-bottom: 1px solid rgba(255,255,255,0.03);
+      font-size: 0.82rem;
+    }
+    .gh-file-item:last-child { border-bottom: none; }
+    .gh-file-item svg { width: 14px; height: 14px; color: var(--accent2); flex-shrink: 0; }
+    .gh-file-name { flex: 1; color: var(--text-dim); font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; }
+    .gh-file-size { color: var(--text-muted); font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; }
+    .gh-analyse-notice {
+      display: flex; gap: 8px; align-items: flex-start;
+      background: rgba(123,97,255,0.06); border: 1px solid rgba(123,97,255,0.18);
+      border-radius: var(--r-md); padding: 11px 14px; margin-bottom: 14px;
+      font-size: 0.8rem; color: var(--text-dim); line-height: 1.5;
+    }
+    .gh-analyse-notice svg { width: 14px; height: 14px; color: var(--accent2); flex-shrink: 0; margin-top: 1px; }
+
+    /* ── Smart URL approach notice ────────────────────── */
+    .url-approach-notice {
+      display: flex; gap: 10px; align-items: flex-start;
+      background: rgba(255,221,0,0.05); border: 1px solid rgba(255,221,0,0.18);
+      border-radius: var(--r-md); padding: 11px 14px; margin-bottom: 14px;
+      font-size: 0.8rem; color: var(--text-dim); line-height: 1.55;
+    }
+    .url-approach-notice svg { width: 14px; height: 14px; color: var(--yellow); flex-shrink: 0; margin-top: 1px; }
+
     /* ── Toast ────────────────────────────────────────── */
     #toast {
       position: fixed; bottom: 28px; right: 28px;
@@ -670,7 +767,7 @@
   <section class="hero" aria-label="Introduction">
     <p class="hero-eyebrow">Code Forensics Tool</p>
     <h1>Detect AI-Written<br>Content Instantly</h1>
-    <p>Paste text, upload a file, or enter any article URL. Our 18-signal heuristic engine runs entirely in your browser — no API key, no data upload, zero privacy risk.</p>
+    <p>Paste text, upload a file, scan a GitHub repo, or drop any URL. Our 18-signal heuristic engine runs entirely in your browser — no API key, no data upload, zero privacy risk.</p>
     <div class="hero-stats">
       <div class="hero-stat"><span class="hero-stat-val">18+</span><span class="hero-stat-lbl">Signal Checks</span></div>
       <div class="hero-stat"><span class="hero-stat-val">100%</span><span class="hero-stat-lbl">Browser-Side</span></div>
@@ -678,6 +775,31 @@
       <div class="hero-stat"><span class="hero-stat-val">Free</span><span class="hero-stat-lbl">Always</span></div>
     </div>
   </section>
+
+  <!-- ── Free Forever Banner ──────────────────────────── -->
+  <div class="free-banner" aria-label="Free forever promise">
+    <div class="free-banner-inner">
+      <div class="free-banner-item">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>
+        <span>Free Forever &amp; Always</span>
+      </div>
+      <div class="free-banner-divider"></div>
+      <div class="free-banner-item">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"/></svg>
+        <span>No Login Required</span>
+      </div>
+      <div class="free-banner-divider"></div>
+      <div class="free-banner-item">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/></svg>
+        <span>Zero Data Collected</span>
+      </div>
+      <div class="free-banner-divider"></div>
+      <div class="free-banner-item">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75 22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3-4.5 16.5"/></svg>
+        <span>Open Source on GitHub</span>
+      </div>
+    </div>
+  </div>
 
   <!-- ── Main ─────────────────────────────────────────── -->
   <main id="main-content">
@@ -687,7 +809,11 @@
       <div class="tab-nav" role="tablist">
         <button class="tab-btn active" role="tab" aria-selected="true"  aria-controls="tab-url"    id="btn-url"    onclick="switchTab('url')">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5a17.92 17.92 0 0 1-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-1.605.42-3.113 1.157-4.418"/></svg>
-          URL Fetch
+          URL Scan
+        </button>
+        <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-github" id="btn-github" onclick="switchTab('github')">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+          GitHub Repo
         </button>
         <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-paste" id="btn-paste" onclick="switchTab('paste')">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"/></svg>
@@ -701,20 +827,17 @@
 
       <!-- Tab: URL -->
       <div class="tab-content active" id="tab-url" role="tabpanel" aria-labelledby="btn-url">
-        <div class="url-info-banner">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z"/></svg>
-          <div class="url-info-text">
-            <strong>Works great with:</strong> Medium, Substack, Wikipedia, dev.to, news articles, blog posts, documentation.
-            <span class="url-blocked-hint">Google, Facebook, Twitter/X, Instagram, LinkedIn block all proxy requests — for those, copy the text and use the <strong>Paste Text</strong> tab.</span>
-          </div>
+        <div class="url-approach-notice">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 0 0 1.5-.189m-1.5.189a6.01 6.01 0 0 1-1.5-.189m3.75 7.478a12.06 12.06 0 0 1-4.5 0m3.75 2.383a14.406 14.406 0 0 1-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 1 0-7.517 0c.85.493 1.509 1.333 1.509 2.316V18"/></svg>
+          <div><strong style="color:var(--yellow)">Smart fetch:</strong> We try 4 different methods to grab the page text. Works on most open articles &amp; blogs. <strong>Big platforms (Google, Twitter/X, Facebook, Instagram)</strong> always block browser fetches — use the <strong>Paste Text</strong> tab for those by copying text from the page manually.</div>
         </div>
         <div class="field-group">
-          <label for="url-input">Website URL <span class="label-hint">Article or blog post URL</span></label>
+          <label for="url-input">Website URL <span class="label-hint">Paste any article, blog, or docs URL</span></label>
           <div class="url-row">
-            <input type="url" id="url-input" placeholder="https://medium.com/some-article" autocomplete="url" />
+            <input type="url" id="url-input" placeholder="https://medium.com/some-article-here" autocomplete="url" />
             <button class="btn btn-primary" onclick="fetchURL()" id="fetch-btn" aria-label="Fetch and analyse URL">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"/></svg>
-              Scan
+              Scan URL
             </button>
           </div>
         </div>
@@ -728,6 +851,46 @@
             <div class="url-error-tip" id="url-error-tip"></div>
           </div>
         </div>
+      </div>
+
+      <!-- Tab: GitHub -->
+      <div class="tab-content" id="tab-github" role="tabpanel" aria-labelledby="btn-github">
+        <div class="gh-analyse-notice">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z"/></svg>
+          Uses the <strong>public GitHub API</strong> — no proxy, no CORS issues. Fetches README + up to 10 code files and analyses them. Works on any public repo with no API key required.
+        </div>
+        <div class="field-group">
+          <label for="gh-input">GitHub Repository URL <span class="label-hint">Public repos only</span></label>
+          <div class="gh-input-group">
+            <input type="url" id="gh-input" placeholder="https://github.com/owner/repo-name" autocomplete="off" />
+            <button class="btn btn-primary" onclick="fetchGitHub()" id="gh-btn">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="15" height="15"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+              Scan Repo
+            </button>
+          </div>
+        </div>
+
+        <!-- Repo info card (shown after fetch) -->
+        <div class="gh-repo-info" id="gh-repo-info">
+          <img class="gh-repo-avatar" id="gh-avatar" src="" alt="Repo owner avatar" />
+          <div class="gh-repo-meta">
+            <div class="gh-repo-name" id="gh-repo-name"></div>
+            <div class="gh-repo-desc" id="gh-repo-desc"></div>
+            <div class="gh-repo-tags" id="gh-repo-tags"></div>
+          </div>
+        </div>
+
+        <!-- Files scanned list -->
+        <div class="gh-files-list" id="gh-files-list" style="display:none">
+          <div class="gh-files-header">
+            <span>FILES SCANNED</span>
+            <span id="gh-files-count" style="color:var(--neon)"></span>
+          </div>
+          <div id="gh-files-items"></div>
+        </div>
+
+        <div class="loading-bar" id="gh-loader"><div class="loading-bar-inner" id="gh-loader-inner"></div></div>
+        <p class="status-msg" id="gh-status" aria-live="polite"></p>
       </div>
 
       <!-- Tab: Paste -->
@@ -972,30 +1135,81 @@
   }
   function hideErrorBanner() { document.getElementById('url-error-banner').classList.remove('visible'); }
 
-  // ── Known blocked domains ──────────────────────────────
-  const BLOCKED = ['google.','facebook.com','fb.com','twitter.com','x.com','instagram.com','linkedin.com','tiktok.com','netflix.com','amazon.com','apple.com','microsoft.com','youtube.com','reddit.com','whatsapp.com','discord.com','cloudflare.com','pinterest.com','snapchat.com','spotify.com'];
-  function isBlocked(hostname) { return BLOCKED.some(d => hostname.includes(d)); }
+  // ── Known hard-blocked domains ─────────────────────────
+  const HARD_BLOCKED = [
+    'google.com','google.co.','accounts.google',
+    'facebook.com','fb.com','instagram.com',
+    'twitter.com','x.com',
+    'linkedin.com','tiktok.com','snapchat.com',
+    'netflix.com','spotify.com','whatsapp.com',
+    'discord.com','cloudflare.com'
+  ];
+  function isHardBlocked(hostname) { return HARD_BLOCKED.some(d => hostname.includes(d)); }
 
-  // ── Multi-proxy fetch ──────────────────────────────────
-  async function proxyFetch(href) {
-    const proxies = [
-      { name: 'AllOrigins', url: 'https://api.allorigins.win/raw?url=' + encodeURIComponent(href) },
-      { name: 'CORSProxy',  url: 'https://corsproxy.io/?' + encodeURIComponent(href) },
-      { name: 'ThingProxy', url: 'https://thingproxy.freeboard.io/fetch/' + href }
-    ];
-    let lastErr = null;
-    for (const proxy of proxies) {
+  // ── Smart URL fetcher — 4 strategies ──────────────────
+  // Strategy 1: Wikipedia special API (best quality, no proxy)
+  // Strategy 2: allorigins.win
+  // Strategy 3: corsproxy.io
+  // Strategy 4: htmlreader via api.codetabs.com
+  async function smartFetch(href, statusId) {
+    const url = new URL(href);
+
+    // Strategy 1: Wikipedia API — no CORS, no proxy needed
+    if (url.hostname.includes('wikipedia.org')) {
+      setStatus(statusId, 'Using Wikipedia API…', '');
+      const title = url.pathname.split('/').pop();
+      const lang  = url.hostname.split('.')[0];
+      const apiUrl = `https://${lang}.wikipedia.org/api/rest_v1/page/summary/${title}`;
       try {
-        setStatus('url-status', 'Trying ' + proxy.name + '…', '');
-        const res = await fetch(proxy.url, { signal: AbortSignal.timeout(13000) });
-        if (res.status === 403) throw new Error('HTTP 403');
-        if (!res.ok) throw new Error('HTTP ' + res.status);
-        const html = await res.text();
-        if (!html || html.trim().length < 150) throw new Error('EMPTY');
-        return html;
-      } catch(e) { lastErr = e; }
+        const res = await fetch(apiUrl, { signal: AbortSignal.timeout(8000) });
+        if (res.ok) {
+          const j = await res.json();
+          const text = (j.extract || '') + ' ' + (j.description || '');
+          if (text.length > 100) return text;
+        }
+      } catch(e) { /* fall through */ }
     }
-    throw lastErr || new Error('All proxies failed');
+
+    // Strategy 2: allorigins (JSON wrapper, more reliable than /raw)
+    setStatus(statusId, 'Fetching via proxy 1/3…', '');
+    try {
+      const res = await fetch(
+        'https://api.allorigins.win/get?url=' + encodeURIComponent(href),
+        { signal: AbortSignal.timeout(12000) }
+      );
+      if (res.ok) {
+        const j = await res.json();
+        if (j.contents && j.contents.length > 200) return j.contents;
+      }
+    } catch(e) { /* fall through */ }
+
+    // Strategy 3: corsproxy.io
+    setStatus(statusId, 'Fetching via proxy 2/3…', '');
+    try {
+      const res = await fetch(
+        'https://corsproxy.io/?' + encodeURIComponent(href),
+        { signal: AbortSignal.timeout(12000) }
+      );
+      if (res.ok) {
+        const txt = await res.text();
+        if (txt && txt.length > 200) return txt;
+      }
+    } catch(e) { /* fall through */ }
+
+    // Strategy 4: api.codetabs.com
+    setStatus(statusId, 'Fetching via proxy 3/3…', '');
+    try {
+      const res = await fetch(
+        'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(href),
+        { signal: AbortSignal.timeout(12000) }
+      );
+      if (res.ok) {
+        const txt = await res.text();
+        if (txt && txt.length > 200) return txt;
+      }
+    } catch(e) { /* fall through */ }
+
+    throw new Error('ALL_FAILED');
   }
 
   // ── fetchURL ───────────────────────────────────────────
@@ -1007,18 +1221,19 @@
 
     let url;
     try { url = new URL(raw); }
-    catch { showToast('Please enter a valid URL e.g. https://example.com'); return; }
+    catch { showToast('Invalid URL — please include https://'); return; }
 
     hideErrorBanner();
     setStatus('url-status', '', '');
 
-    if (isBlocked(url.hostname)) {
+    // Hard-blocked: tell user immediately
+    if (isHardBlocked(url.hostname)) {
       showErrorBanner(
-        url.hostname.toUpperCase() + ' BLOCKS PROXY REQUESTS',
-        'This site actively rejects all cross-origin fetch requests from browser-based tools. This is a server-side policy — no proxy can bypass it.',
-        '<strong>Quick fix:</strong> Open the page in your browser → Ctrl+A to select all text → Ctrl+C to copy → switch to the <strong>Paste Text</strong> tab → Ctrl+V to paste → click Analyse.'
+        url.hostname.toUpperCase() + ' CANNOT BE FETCHED',
+        'This platform blocks all third-party fetch attempts at the server level. No proxy or workaround exists for browser-only tools.',
+        '<strong>Easy fix:</strong> Open the page → select all text (Ctrl+A) → copy (Ctrl+C) → click the <strong>Paste Text</strong> tab → paste → Analyse.'
       );
-      setStatus('url-status', 'Cannot fetch this site. Use Paste Text tab instead.', 'error');
+      setStatus('url-status', 'Use Paste Text tab for this site.', 'error');
       return;
     }
 
@@ -1026,38 +1241,197 @@
     document.getElementById('fetch-btn').disabled = true;
 
     try {
-      const html = await proxyFetch(url.href);
-      setStatus('url-status', 'Extracting visible text…', '');
-      const text = extractTextFromHTML(html);
+      const raw_html = await smartFetch(url.href, 'url-status');
+      setStatus('url-status', 'Extracting text…', '');
+
+      // Determine if it's HTML or plain text
+      const isHTML = /<html|<body|<div|<p\s|<!DOCTYPE/i.test(raw_html);
+      const text = isHTML ? extractTextFromHTML(raw_html) : raw_html.replace(/\s+/g,' ').trim();
 
       if (text.length < 80) {
         showErrorBanner(
-          'TOO LITTLE TEXT EXTRACTED',
-          'The page returned minimal readable text. It may be a JavaScript SPA (React/Next.js), require login, or use aggressive bot-protection.',
-          '<strong>Fix:</strong> Copy the page text manually from your browser and use the <strong>Paste Text</strong> tab.'
+          'TOO LITTLE TEXT FOUND',
+          'The page returned almost no readable text. It\'s likely a JavaScript-rendered app (React/Vue/Next.js SPA), a login wall, or a heavily protected site.',
+          '<strong>Fix:</strong> Copy the visible text from your browser manually → use the <strong>Paste Text</strong> tab.'
         );
-        setStatus('url-status', 'Not enough text found.', 'error');
+        setStatus('url-status', 'Not enough text extracted.', 'error');
         return;
       }
 
-      setStatus('url-status', 'Analysing ' + text.length.toLocaleString() + ' characters…', '');
-      await delay(250);
+      setStatus('url-status', 'Analysing ' + text.length.toLocaleString() + ' chars…', '');
+      await delay(200);
       runAnalysis(text);
-      setStatus('url-status', '✓ ' + text.length.toLocaleString() + ' chars analysed from ' + url.hostname, 'ok');
+      setStatus('url-status', '✓ ' + text.length.toLocaleString() + ' chars from ' + url.hostname, 'ok');
 
     } catch(err) {
-      const isTimeout = err.name === 'TimeoutError' || err.name === 'AbortError';
-      const title = isTimeout ? 'REQUEST TIMED OUT' : 'ALL PROXIES BLOCKED';
-      const body = isTimeout
-        ? 'All three proxy servers timed out. The site is likely behind rate-limiting or bot protection.'
-        : 'All proxy attempts returned HTTP 403 (Forbidden). The site has configured server-side rules to block proxy/scraper requests.';
-      showErrorBanner(title, body,
-        '<strong>Fix:</strong> Copy the article text from your browser and paste it in the <strong>Paste Text</strong> tab.'
+      showErrorBanner(
+        'ALL FETCH METHODS FAILED',
+        'This site blocked all 4 fetch attempts (allorigins, corsproxy, codetabs, and direct). The site enforces strict anti-scraping rules.',
+        '<strong>Fix:</strong> Open the page in your browser → select all text → copy → use the <strong>Paste Text</strong> tab to paste and analyse.'
       );
-      setStatus('url-status', title.toLowerCase() + '. See details below.', 'error');
+      setStatus('url-status', 'Could not fetch. Use Paste Text tab.', 'error');
     } finally {
       hideLoader('url-loader', 'url-loader-inner');
       document.getElementById('fetch-btn').disabled = false;
+    }
+  }
+
+  // ════════════════════════════════════════════════════════
+  //  GITHUB REPO SCANNER — uses public GitHub API
+  // ════════════════════════════════════════════════════════
+
+  // File extensions worth analysing
+  const CODE_EXTS = ['js','ts','py','java','cpp','c','cs','go','rb','php','swift','kt','rs','jsx','tsx','vue','md','txt','html','css','sh','yml','yaml','json'];
+  const MAX_FILES = 10;
+  const MAX_FILE_BYTES = 60000; // 60KB per file
+
+  function parseGitHubURL(raw) {
+    try {
+      const u = new URL(raw);
+      if (!u.hostname.includes('github.com')) return null;
+      const parts = u.pathname.replace(/^\//, '').replace(/\/$/, '').split('/');
+      if (parts.length < 2) return null;
+      return { owner: parts[0], repo: parts[1] };
+    } catch { return null; }
+  }
+
+  async function ghGet(path) {
+    const res = await fetch('https://api.github.com/' + path, {
+      headers: { 'Accept': 'application/vnd.github.v3+json' },
+      signal: AbortSignal.timeout(10000)
+    });
+    if (!res.ok) throw new Error('GitHub API: HTTP ' + res.status + ' — ' + (res.status === 403 ? 'Rate limited. Wait a minute and try again.' : res.status === 404 ? 'Repo not found or is private.' : ''));
+    return res.json();
+  }
+
+  async function fetchGitHub() {
+    let raw = document.getElementById('gh-input').value.trim();
+    if (!raw) { showToast('Please enter a GitHub repo URL.'); return; }
+    if (!/^https?:\/\//i.test(raw)) raw = 'https://github.com/' + raw;
+    document.getElementById('gh-input').value = raw;
+
+    const parsed = parseGitHubURL(raw);
+    if (!parsed) {
+      setStatus('gh-status', 'Enter a valid GitHub repo URL e.g. https://github.com/owner/repo', 'error');
+      return;
+    }
+
+    // Reset UI
+    document.getElementById('gh-repo-info').classList.remove('visible');
+    document.getElementById('gh-files-list').style.display = 'none';
+    document.getElementById('gh-files-items').innerHTML = '';
+    setStatus('gh-status', '', '');
+    showLoader('gh-loader', 'gh-loader-inner');
+    document.getElementById('gh-btn').disabled = true;
+
+    const { owner, repo } = parsed;
+
+    try {
+      // 1. Fetch repo metadata
+      setStatus('gh-status', 'Fetching repo info…', '');
+      const meta = await ghGet(`repos/${owner}/${repo}`);
+
+      // Show repo card
+      document.getElementById('gh-avatar').src = meta.owner?.avatar_url || '';
+      document.getElementById('gh-repo-name').textContent = meta.full_name;
+      document.getElementById('gh-repo-desc').textContent = meta.description || 'No description provided.';
+      const tags = document.getElementById('gh-repo-tags');
+      tags.innerHTML = '';
+      if (meta.language) tags.innerHTML += `<span class="gh-tag">${meta.language}</span>`;
+      if (meta.stargazers_count !== undefined) tags.innerHTML += `<span class="gh-tag">★ ${meta.stargazers_count.toLocaleString()}</span>`;
+      if (meta.forks_count !== undefined) tags.innerHTML += `<span class="gh-tag">⑂ ${meta.forks_count.toLocaleString()}</span>`;
+      if (meta.license?.spdx_id) tags.innerHTML += `<span class="gh-tag">${meta.license.spdx_id}</span>`;
+      document.getElementById('gh-repo-info').classList.add('visible');
+
+      // 2. Get file tree
+      setStatus('gh-status', 'Reading file tree…', '');
+      const branch = meta.default_branch || 'main';
+      let treeData;
+      try {
+        treeData = await ghGet(`repos/${owner}/${repo}/git/trees/${branch}?recursive=1`);
+      } catch {
+        // Try master if main fails
+        treeData = await ghGet(`repos/${owner}/${repo}/git/trees/master?recursive=1`);
+      }
+
+      // Filter to analysable files, prioritise code files, skip node_modules/vendor
+      const allFiles = (treeData.tree || []).filter(f =>
+        f.type === 'blob' &&
+        !f.path.includes('node_modules/') &&
+        !f.path.includes('vendor/') &&
+        !f.path.includes('.min.') &&
+        !f.path.includes('package-lock') &&
+        !f.path.includes('yarn.lock') &&
+        CODE_EXTS.some(ext => f.path.toLowerCase().endsWith('.' + ext))
+      );
+
+      // Sort: README first, then shortest paths (top-level first), then limit
+      allFiles.sort((a, b) => {
+        const aIsReadme = /readme/i.test(a.path) ? -1 : 0;
+        const bIsReadme = /readme/i.test(b.path) ? -1 : 0;
+        return aIsReadme - bIsReadme || a.path.split('/').length - b.path.split('/').length;
+      });
+
+      const filesToScan = allFiles.slice(0, MAX_FILES);
+
+      if (!filesToScan.length) {
+        setStatus('gh-status', 'No analysable files found in this repo.', 'error');
+        return;
+      }
+
+      // 3. Fetch file contents
+      setStatus('gh-status', `Fetching ${filesToScan.length} files…`, '');
+      document.getElementById('gh-files-list').style.display = 'block';
+      document.getElementById('gh-files-count').textContent = filesToScan.length + ' files';
+
+      let combinedText = '';
+      const itemsEl = document.getElementById('gh-files-items');
+
+      for (let i = 0; i < filesToScan.length; i++) {
+        const f = filesToScan[i];
+        setStatus('gh-status', `Reading file ${i+1}/${filesToScan.length}: ${f.path}`, '');
+        try {
+          const fileData = await ghGet(`repos/${owner}/${repo}/contents/${f.path}`);
+          let content = '';
+          if (fileData.encoding === 'base64' && fileData.content) {
+            content = atob(fileData.content.replace(/\n/g, '')).slice(0, MAX_FILE_BYTES);
+          } else if (typeof fileData.content === 'string') {
+            content = fileData.content.slice(0, MAX_FILE_BYTES);
+          }
+          combinedText += '\n\n// FILE: ' + f.path + '\n' + content;
+
+          // Add file to list UI
+          const sizeKB = ((fileData.size || 0) / 1024).toFixed(1);
+          const ext = f.path.split('.').pop().toLowerCase();
+          const div = document.createElement('div');
+          div.className = 'gh-file-item';
+          div.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"/></svg>
+            <span class="gh-file-name">${f.path}</span>
+            <span class="gh-file-size">${sizeKB} KB</span>
+          `;
+          itemsEl.appendChild(div);
+        } catch(e) {
+          // Skip unreadable files silently
+        }
+        await delay(120); // be polite to GitHub API rate limits
+      }
+
+      if (combinedText.trim().length < 80) {
+        setStatus('gh-status', 'Could not read enough file content. Repo may be empty or all files are binary.', 'error');
+        return;
+      }
+
+      setStatus('gh-status', 'Analysing ' + combinedText.length.toLocaleString() + ' chars across ' + filesToScan.length + ' files…', '');
+      await delay(200);
+      runAnalysis(combinedText);
+      setStatus('gh-status', '✓ ' + owner + '/' + repo + ' scanned — ' + filesToScan.length + ' files, ' + combinedText.length.toLocaleString() + ' chars', 'ok');
+
+    } catch(err) {
+      setStatus('gh-status', err.message || 'Failed to scan repo.', 'error');
+    } finally {
+      hideLoader('gh-loader', 'gh-loader-inner');
+      document.getElementById('gh-btn').disabled = false;
     }
   }
 
@@ -1374,6 +1748,8 @@
 
   // Enter key on URL input
   document.getElementById('url-input').addEventListener('keydown', e => { if (e.key==='Enter') fetchURL(); });
+  // Enter key on GitHub input
+  document.getElementById('gh-input').addEventListener('keydown', e => { if (e.key==='Enter') fetchGitHub(); });
   updateCharCount();
   </script>
 </body>
