@@ -20,10 +20,11 @@
       --border2:   rgba(123,97,255,0.4);
       --accent:    #7b61ff;
       --accent2:   #a78bfa;
-      --neon:      #00ff88;
+      --neon:      #ff2d55;
       --yellow:    #ffdd00;
       --orange:    #ff7b00;
       --red:       #ff2d55;
+      --human-green: #00ff88;
       --text:      #e8e8f0;
       --text-dim:  #8888aa;
       --text-muted:#55556a;
@@ -595,15 +596,15 @@
       transition: transform var(--t);
     }
     .legend-item:hover { transform: translateY(-2px); }
-    .legend-item.vibe  { border-color: rgba(0,255,136,0.25);  background: rgba(0,255,136,0.05); }
-    .legend-item.sus   { border-color: rgba(255,221,0,0.25);  background: rgba(255,221,0,0.05); }
-    .legend-item.mixed { border-color: rgba(255,123,0,0.25);  background: rgba(255,123,0,0.05); }
-    .legend-item.human { border-color: rgba(255,45,85,0.25);  background: rgba(255,45,85,0.05); }
+    .legend-item.vibe  { border-color: rgba(255,45,85,0.3);    background: rgba(255,45,85,0.06); }
+    .legend-item.sus   { border-color: rgba(255,221,0,0.3);    background: rgba(255,221,0,0.06); }
+    .legend-item.mixed { border-color: rgba(255,123,0,0.3);    background: rgba(255,123,0,0.06); }
+    .legend-item.human { border-color: rgba(0,255,136,0.3);    background: rgba(0,255,136,0.06); }
     .legend-dot { width: 10px; height: 10px; border-radius: 50%; margin: 0 auto 10px; }
-    .legend-item.vibe  .legend-dot { background: var(--neon);   box-shadow: 0 0 8px var(--neon); }
-    .legend-item.sus   .legend-dot { background: var(--yellow); box-shadow: 0 0 8px var(--yellow); }
-    .legend-item.mixed .legend-dot { background: var(--orange); box-shadow: 0 0 8px var(--orange); }
-    .legend-item.human .legend-dot { background: var(--red);    box-shadow: 0 0 8px var(--red); }
+    .legend-item.vibe  .legend-dot { background: var(--red);         box-shadow: 0 0 8px var(--red); }
+    .legend-item.sus   .legend-dot { background: var(--yellow);      box-shadow: 0 0 8px var(--yellow); }
+    .legend-item.mixed .legend-dot { background: var(--orange);      box-shadow: 0 0 8px var(--orange); }
+    .legend-item.human .legend-dot { background: var(--human-green); box-shadow: 0 0 8px var(--human-green); }
     .legend-name { font-family: 'Orbitron', sans-serif; font-size: 0.72rem; font-weight: 700; color: var(--text); margin-bottom: 4px; letter-spacing: 0.06em; }
     .legend-range { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--text-muted); margin-bottom: 4px; }
     .legend-desc { font-size: 0.78rem; color: var(--text-muted); }
@@ -626,31 +627,38 @@
     .footer-links a:hover { color: var(--accent2); }
     .footer-note { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--text-muted); opacity: 0.6; }
 
-    /* ── Free Forever Banner ─────────────────────────── */
+    /* ── Free Forever Marquee Banner ─────────────────── */
     .free-banner {
-      background: linear-gradient(90deg, rgba(123,97,255,0.08) 0%, rgba(0,255,136,0.06) 50%, rgba(123,97,255,0.08) 100%);
-      border-top: 1px solid rgba(123,97,255,0.15);
-      border-bottom: 1px solid rgba(123,97,255,0.15);
-      padding: 14px 24px;
+      background: linear-gradient(90deg, rgba(123,97,255,0.08) 0%, rgba(0,255,136,0.04) 50%, rgba(123,97,255,0.08) 100%);
+      border-top: 1px solid rgba(123,97,255,0.18);
+      border-bottom: 1px solid rgba(123,97,255,0.18);
+      padding: 12px 0;
       position: relative; z-index: 1;
+      overflow: hidden;
     }
-    .free-banner-inner {
-      max-width: 1100px; margin: 0 auto;
-      display: flex; align-items: center; justify-content: center;
-      gap: 0; flex-wrap: wrap;
+    .free-banner-track {
+      display: flex; align-items: center;
+      animation: marquee-scroll 28s linear infinite;
+      width: max-content;
+    }
+    .free-banner:hover .free-banner-track { animation-play-state: paused; }
+    @keyframes marquee-scroll {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
     }
     .free-banner-item {
       display: flex; align-items: center; gap: 7px;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.75rem; font-weight: 500;
-      color: var(--text-dim); letter-spacing: 0.04em;
-      padding: 4px 20px;
+      font-size: 0.72rem; font-weight: 500;
+      color: var(--text-dim); letter-spacing: 0.06em;
+      padding: 2px 28px;
+      white-space: nowrap;
     }
-    .free-banner-item svg { width: 14px; height: 14px; color: var(--neon); flex-shrink: 0; }
-    .free-banner-divider { width: 1px; height: 20px; background: var(--border); }
-    @media (max-width: 600px) {
-      .free-banner-item { font-size: 0.68rem; padding: 4px 10px; }
-      .free-banner-divider { display: none; }
+    .free-banner-item svg { width: 13px; height: 13px; color: var(--human-green); flex-shrink: 0; }
+    .free-banner-sep {
+      width: 4px; height: 4px; border-radius: 50%;
+      background: var(--border2); flex-shrink: 0;
+      margin: 0 8px;
     }
 
     /* ── GitHub tab specific ──────────────────────────── */
@@ -723,6 +731,150 @@
     }
     .url-approach-notice svg { width: 14px; height: 14px; color: var(--yellow); flex-shrink: 0; margin-top: 1px; }
 
+    /* ── Forensic Logic Section ───────────────────────── */
+    .forensic-section {
+      margin-top: 48px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--r-xl);
+      overflow: hidden;
+    }
+    .forensic-header {
+      padding: 28px 32px 24px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(123,97,255,0.04);
+    }
+    .forensic-eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem; color: var(--accent2);
+      letter-spacing: 0.14em; text-transform: uppercase;
+      margin-bottom: 10px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .forensic-eyebrow::before {
+      content: ''; display: inline-block;
+      width: 20px; height: 1px; background: var(--accent2);
+    }
+    .forensic-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(1rem, 2vw, 1.35rem);
+      font-weight: 700; color: var(--text);
+      letter-spacing: 0.04em; margin-bottom: 14px;
+    }
+    .forensic-desc {
+      font-size: 0.92rem; color: var(--text-dim);
+      line-height: 1.75; max-width: 720px;
+    }
+    .forensic-pillars {
+      display: grid; grid-template-columns: repeat(2, 1fr);
+      gap: 1px; background: var(--border);
+    }
+    @media (max-width: 768px) { .forensic-pillars { grid-template-columns: 1fr; } }
+    .forensic-pillar {
+      background: var(--card);
+      padding: 24px 28px;
+    }
+    .pillar-number {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem; color: var(--accent);
+      letter-spacing: 0.1em; text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .pillar-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.82rem; font-weight: 700;
+      color: var(--text); margin-bottom: 8px; letter-spacing: 0.04em;
+    }
+    .pillar-desc { font-size: 0.83rem; color: var(--text-dim); line-height: 1.6; }
+    .pillar-signals {
+      margin-top: 10px; display: flex; flex-wrap: wrap; gap: 6px;
+    }
+    .pillar-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem; padding: 2px 8px;
+      border-radius: 4px; border: 1px solid var(--border);
+      color: var(--text-muted);
+    }
+    .pillar-tag.ai   { border-color: rgba(255,45,85,0.3);    color: var(--red);         background: rgba(255,45,85,0.06); }
+    .pillar-tag.human{ border-color: rgba(0,255,136,0.3);    color: var(--human-green); background: rgba(0,255,136,0.06); }
+
+    .forensic-footer {
+      padding: 24px 32px;
+      border-top: 1px solid var(--border);
+      display: grid; grid-template-columns: 1fr auto;
+      gap: 24px; align-items: center;
+    }
+    @media (max-width: 600px) { .forensic-footer { grid-template-columns: 1fr; } }
+    .forensic-disclaimer {
+      font-size: 0.82rem; color: var(--text-muted); line-height: 1.65;
+    }
+    .forensic-disclaimer strong { color: var(--text-dim); }
+    .forensic-formula {
+      background: rgba(123,97,255,0.08);
+      border: 1px solid var(--border2);
+      border-radius: var(--r-md);
+      padding: 14px 20px; text-align: center; flex-shrink: 0;
+    }
+    .forensic-formula-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem; color: var(--text-muted);
+      letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px;
+    }
+    .forensic-formula-eq {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem; color: var(--accent2); white-space: nowrap;
+    }
+    .forensic-privacy {
+      display: flex; gap: 20px; margin-top: 12px; flex-wrap: wrap;
+    }
+    .forensic-privacy-item {
+      display: flex; align-items: center; gap: 5px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem; color: var(--text-muted); letter-spacing: 0.04em;
+    }
+    .forensic-privacy-item svg { width: 12px; height: 12px; color: var(--human-green); }
+
+    /* ── Roast banner ──────────────────────────────────── */
+    .roast-section {
+      margin-top: 24px;
+      background: linear-gradient(135deg, rgba(255,45,85,0.06) 0%, rgba(123,97,255,0.06) 100%);
+      border: 1px solid rgba(255,45,85,0.2);
+      border-radius: var(--r-xl);
+      padding: 28px 32px;
+      display: flex; align-items: center; gap: 24px;
+      flex-wrap: wrap;
+    }
+    .roast-icon {
+      font-size: 2.5rem; flex-shrink: 0;
+      filter: drop-shadow(0 0 12px rgba(255,45,85,0.4));
+    }
+    .roast-content { flex: 1; min-width: 200px; }
+    .roast-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1rem; font-weight: 700;
+      color: var(--red); letter-spacing: 0.06em;
+      margin-bottom: 6px;
+    }
+    .roast-desc { font-size: 0.88rem; color: var(--text-dim); line-height: 1.6; }
+    .roast-example {
+      display: block; margin-top: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem; color: var(--text-muted);
+      font-style: italic;
+    }
+    #roast-output {
+      display: none; margin-top: 16px;
+      width: 100%;
+      background: rgba(255,45,85,0.08);
+      border: 1px solid rgba(255,45,85,0.25);
+      border-radius: var(--r-md);
+      padding: 16px 20px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem; color: var(--text);
+      line-height: 1.7;
+    }
+    #roast-output.visible { display: block; }
+
     /* ── Toast ────────────────────────────────────────── */
     #toast {
       position: fixed; bottom: 28px; right: 28px;
@@ -776,28 +928,35 @@
     </div>
   </section>
 
-  <!-- ── Free Forever Banner ──────────────────────────── -->
+  <!-- ── Free Forever Marquee ───────────────────────────── -->
   <div class="free-banner" aria-label="Free forever promise">
-    <div class="free-banner-inner">
-      <div class="free-banner-item">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>
-        <span>Free Forever &amp; Always</span>
-      </div>
-      <div class="free-banner-divider"></div>
-      <div class="free-banner-item">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"/></svg>
-        <span>No Login Required</span>
-      </div>
-      <div class="free-banner-divider"></div>
-      <div class="free-banner-item">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/></svg>
-        <span>Zero Data Collected</span>
-      </div>
-      <div class="free-banner-divider"></div>
-      <div class="free-banner-item">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75 22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3-4.5 16.5"/></svg>
-        <span>Open Source on GitHub</span>
-      </div>
+    <div class="free-banner-track" aria-hidden="true">
+      <!-- set 1 -->
+      <div class="free-banner-item"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>FREE FOREVER &amp; ALWAYS</div>
+      <div class="free-banner-sep"></div>
+      <div class="free-banner-item"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"/></svg>NO LOGIN REQUIRED</div>
+      <div class="free-banner-sep"></div>
+      <div class="free-banner-item"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/></svg>ZERO DATA COLLECTED</div>
+      <div class="free-banner-sep"></div>
+      <div class="free-banner-item"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75 22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3-4.5 16.5"/></svg>OPEN SOURCE ON GITHUB</div>
+      <div class="free-banner-sep"></div>
+      <div class="free-banner-item"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 0 1-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 0 1 4.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3"/></svg>100% BROWSER-SIDE ANALYSIS</div>
+      <div class="free-banner-sep"></div>
+      <div class="free-banner-item"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"/></svg>18+ PATTERN SIGNALS</div>
+      <div class="free-banner-sep"></div>
+      <!-- set 2 — duplicate for seamless loop -->
+      <div class="free-banner-item"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>FREE FOREVER &amp; ALWAYS</div>
+      <div class="free-banner-sep"></div>
+      <div class="free-banner-item"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"/></svg>NO LOGIN REQUIRED</div>
+      <div class="free-banner-sep"></div>
+      <div class="free-banner-item"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/></svg>ZERO DATA COLLECTED</div>
+      <div class="free-banner-sep"></div>
+      <div class="free-banner-item"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75 22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3-4.5 16.5"/></svg>OPEN SOURCE ON GITHUB</div>
+      <div class="free-banner-sep"></div>
+      <div class="free-banner-item"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 0 1-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 0 1 4.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3"/></svg>100% BROWSER-SIDE ANALYSIS</div>
+      <div class="free-banner-sep"></div>
+      <div class="free-banner-item"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"/></svg>18+ PATTERN SIGNALS</div>
+      <div class="free-banner-sep"></div>
     </div>
   </div>
 
@@ -1047,6 +1206,109 @@
         </div>
       </div>
     </div>
+
+    <!-- Forensic Scoring Logic -->
+    <div class="forensic-section" aria-label="Forensic scoring logic">
+      <div class="forensic-header">
+        <p class="forensic-eyebrow">Methodology</p>
+        <h2 class="forensic-title">Forensic Scoring Logic</h2>
+        <p class="forensic-desc">
+          Our model combines structural code analysis, linguistic pattern recognition, and statistical entropy measurement to identify signals commonly associated with AI-generated or human-written content.<br><br>
+          You're not detecting "AI". You're detecting <strong style="color:var(--accent2)">patterns that strongly correlate with AI-assisted generation</strong>. That distinction makes it credible and defensible.
+        </p>
+      </div>
+
+      <div class="forensic-pillars">
+        <div class="forensic-pillar">
+          <p class="pillar-number">Pillar 01</p>
+          <p class="pillar-title">Structure Analysis</p>
+          <p class="pillar-desc">AI code tends to be overly structured and symmetric. We measure formatting consistency, over-modularization, template repetition, and boilerplate density.</p>
+          <div class="pillar-signals">
+            <span class="pillar-tag ai">Perfect indentation +8</span>
+            <span class="pillar-tag ai">Over-modular +6</span>
+            <span class="pillar-tag ai">Template repeat +7</span>
+            <span class="pillar-tag human">Messy hacks −10</span>
+            <span class="pillar-tag human">TODO/FIXME −8</span>
+          </div>
+        </div>
+        <div class="forensic-pillar">
+          <p class="pillar-number">Pillar 02</p>
+          <p class="pillar-title">Linguistic Patterns</p>
+          <p class="pillar-desc">AI writes comments and prose differently. We scan for textbook-style explanations, filler phrases, and the absence of personality, frustration, or humor.</p>
+          <div class="pillar-signals">
+            <span class="pillar-tag ai">Filler phrases +12</span>
+            <span class="pillar-tag ai">Passive voice +9</span>
+            <span class="pillar-tag ai">Hedge language +6</span>
+            <span class="pillar-tag human">Slang/informal −12</span>
+            <span class="pillar-tag human">Personal voice −10</span>
+          </div>
+        </div>
+        <div class="forensic-pillar">
+          <p class="pillar-number">Pillar 03</p>
+          <p class="pillar-title">Engineering Behaviour</p>
+          <p class="pillar-desc">Real development leaves fingerprints: incremental commits, weird dependency choices, hotfixes, renamed files. AI repos are too clean, too complete, too fast.</p>
+          <div class="pillar-signals">
+            <span class="pillar-tag ai">Generic var names +11</span>
+            <span class="pillar-tag ai">Every fn docstrings +9</span>
+            <span class="pillar-tag ai">No debug leftovers +8</span>
+            <span class="pillar-tag human">Inconsistent naming −8</span>
+          </div>
+        </div>
+        <div class="forensic-pillar">
+          <p class="pillar-number">Pillar 04</p>
+          <p class="pillar-title">Entropy &amp; Randomness</p>
+          <p class="pillar-desc">Human code has chaos: naming entropy, line length variance, random spacing quirks, unusual comment structures. Statistically smooth output signals AI generation.</p>
+          <div class="pillar-signals">
+            <span class="pillar-tag ai">Uniform para lengths +10</span>
+            <span class="pillar-tag ai">Consistent sentence len +7</span>
+            <span class="pillar-tag ai">Low vocab variety +9</span>
+            <span class="pillar-tag human">High entropy −10</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="forensic-footer">
+        <div>
+          <p class="forensic-disclaimer">
+            <strong>This tool does not determine authorship.</strong> It detects statistical patterns commonly found in AI-assisted or human-written code and text. All signals are aggregated into a normalized score, stabilized through a non-linear evaluation function to prevent extreme distortions. The result is a mathematically grounded <em>probability analysis</em> of typical AI versus human patterns.
+          </p>
+          <div class="forensic-privacy">
+            <div class="forensic-privacy-item">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>
+              No data stored
+            </div>
+            <div class="forensic-privacy-item">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>
+              No external processing
+            </div>
+            <div class="forensic-privacy-item">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>
+              All analysis runs in your browser
+            </div>
+          </div>
+        </div>
+        <div class="forensic-formula">
+          <p class="forensic-formula-label">Mathematical Scoring Model</p>
+          <p class="forensic-formula-eq">score = 30 + 45 × tanh(rawSignal / 30)</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Roast My Repo -->
+    <div class="roast-section" id="roast-section" aria-label="Roast my repo">
+      <div class="roast-icon">🔥</div>
+      <div class="roast-content">
+        <p class="roast-title">Roast My Repo</p>
+        <p class="roast-desc">Run a scan above, then get a savage honest verdict about your code. Developers will share this instantly.</p>
+        <span class="roast-example" id="roast-placeholder">"Your repo feels 82% vibe coded. Bro, did you even touch this code?"</span>
+        <div id="roast-output"></div>
+      </div>
+      <button class="btn btn-primary" id="roast-btn" onclick="generateRoast()" style="display:none;flex-shrink:0">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="15" height="15"><path stroke-linecap="round" stroke-linejoin="round" d="M15.362 5.214A8.252 8.252 0 0 1 12 21 8.25 8.25 0 0 1 6.038 7.047 8.287 8.287 0 0 0 9 9.601a8.983 8.983 0 0 1 3.361-6.867 8.21 8.21 0 0 0 3 2.48Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 18a3.75 3.75 0 0 0 .495-7.468 5.99 5.99 0 0 0-1.925 3.547 5.975 5.975 0 0 1-2.133-1.001A3.75 3.75 0 0 0 12 18Z"/></svg>
+        Roast It
+      </button>
+    </div>
+
   </main>
 
   <footer role="contentinfo">
@@ -1678,10 +1940,55 @@
   }
 
   function getCategory(score) {
-    if (score > 72) return { key:'vibe',  label:'VIBE CODED',      color:'#00ff88', desc:'Strong AI-generation patterns detected across multiple signal categories.' };
-    if (score > 50) return { key:'sus',   label:'SUSPICIOUS',      color:'#ffdd00', desc:'Multiple AI signals found. Likely AI-assisted or lightly edited LLM output.' };
-    if (score > 35) return { key:'mixed', label:'MIXED SIGNALS',   color:'#ff7b00', desc:'Inconclusive. Blend of AI and human writing characteristics.' };
-    return              { key:'human', label:'CERTIFIED HUMAN',  color:'#ff2d55', desc:'Low AI signal density. Natural variation and human writing patterns detected.' };
+    if (score > 72) return { key:'vibe',  label:'VIBE CODED',      color:'#ff2d55', desc:'Strong AI-generation patterns detected across multiple signal categories. Pattern analysis suggests high AI-assisted generation likelihood.' };
+    if (score > 50) return { key:'sus',   label:'SUSPICIOUS',      color:'#ffdd00', desc:'Multiple AI signals found. Likely AI-assisted or lightly edited LLM output. Human involvement possible but limited.' };
+    if (score > 35) return { key:'mixed', label:'MIXED SIGNALS',   color:'#ff7b00', desc:'Inconclusive result. Blend of AI and human writing characteristics detected. Could be AI-assisted with significant human editing.' };
+    return              { key:'human', label:'CERTIFIED HUMAN',  color:'#00ff88', desc:'Low AI signal density. Natural variation, informal language, and human writing patterns detected. Likely human-authored content.' };
+  }
+
+  // ── Roast generator ────────────────────────────────────
+  let lastScore = null;
+  let lastCategory = null;
+
+  const ROASTS = {
+    vibe: [
+      "score% AI likelihood. Bro didn't write a single line — ChatGPT did the whole sprint.",
+      "score% vibe coded. Your commit history is one line: 'initial commit'. Classic AI slop.",
+      "score% AI patterns detected. Even the variable names are soulless. `data`, `result`, `response`? Really?",
+      "score% likelihood. This codebase has the personality of a terms-of-service document.",
+      "score% AI signals. Every function has a docstring. Every file has a header. No human writes this clean — or this boring.",
+      "score% match. This README was definitely generated before a single line of code was written.",
+    ],
+    sus: [
+      "score% AI signals. Started human, lost interest, let GPT finish the job. We see you.",
+      "score% suspicious. Some genuine thought went in here, then AI took over for the boring parts. Fair enough.",
+      "score% likelihood. Half developer, half prompt engineer. The seams are showing.",
+      "score% flagged. There are human fingerprints — but also suspiciously perfect formatting. Hybrid situation.",
+    ],
+    mixed: [
+      "score% mixed signals. Actually unclear. Could be a very organized human or a very lazy AI. Coin flip.",
+      "score% inconclusive. You write like you had one coffee and asked AI to clean it up. Respectable.",
+      "score% hybrid patterns. Some chaos, some structure. The entropy is real but so are some of those weird hacks.",
+    ],
+    human: [
+      "score% human. That commented-out code from 2019 is deeply authentic. Never delete it.",
+      "score% certified human. Only a real developer leaves a TODO that says 'fix later' for 3 years.",
+      "score% organic. The inconsistent naming, the one-letter variables, the zero docstrings — art.",
+      "score% human patterns. This code has suffered. That's the most human thing I've ever seen.",
+      "score% certified. This looks like it was written at 2am under deadline pressure. Respect.",
+    ]
+  };
+
+  function generateRoast() {
+    if (lastScore === null) { showToast('Run an analysis first.'); return; }
+    const lines = ROASTS[lastCategory.key] || ROASTS.mixed;
+    const picked = lines[Math.floor(Math.random() * lines.length)].replace('score', lastScore.toFixed(1));
+    const out = document.getElementById('roast-output');
+    const placeholder = document.getElementById('roast-placeholder');
+    out.textContent = '// VERDICT: ' + picked;
+    out.classList.add('visible');
+    if (placeholder) placeholder.style.display = 'none';
+    showToast('Roasted. 🔥');
   }
 
   function buildSummary(score, signals, cat) {
@@ -1738,6 +2045,12 @@
 
     // Summary
     document.getElementById('summary-text').textContent = buildSummary(score, signals, cat);
+
+    // Store for roast
+    lastScore = score;
+    lastCategory = cat;
+    const roastBtn = document.getElementById('roast-btn');
+    if (roastBtn) roastBtn.style.display = 'flex';
 
     // Show results
     const res = document.getElementById('results');
