@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git init:*)",
+      "Bash(git config:*)",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nfeat: initial release of AiCHECKER\n\nBrowser-only AI vs human content detector. Features URL fetching,\ntext paste, and PDF/TXT/HTML file upload. 18+ heuristic signal checks\nwith animated SVG score ring, four score categories, and zero backend.\nSoft UI design with Cormorant Garamond + Montserrat typography.\n\nCo-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git remote add:*)"
+    ]
+  }
+}
